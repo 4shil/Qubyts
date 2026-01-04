@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    margin: 0;
+    background-color: #030303;
+    cursor: none; 
+}
+
+/* ACCESSIBILITY FIX: Restore system cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    body { cursor: auto !important; }
+    .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+html { 
+    scroll-behavior: auto; 
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.cursor-scale { }
+
+/* Performance optimization */
+.will-animate {
+    will-change: transform, opacity;
+}
+
+/* Section snap for scrolling */
+.section-snap {
+    scroll-snap-align: start;
+}
