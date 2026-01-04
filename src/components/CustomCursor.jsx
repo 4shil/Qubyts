@@ -43,7 +43,7 @@ const CustomCursor = () => {
                     scale: isHovering ? 1.5 : 0.5,
                     opacity: isHovering ? 1 : 0.5,
                     borderWidth: isHovering ? '1px' : '2px',
-                    backgroundColor: isHovering ? 'rgba(255,255,255,0.1)' : 'transparent',
+                    backgroundColor: isHovering ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0)',
                 }}
             />
         </>

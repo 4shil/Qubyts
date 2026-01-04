@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useScroll } from 'framer-motion';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { GSAPScrollProvider } from './context/GSAPScrollProvider';
 import { NOISE_SVG } from './components/VoidScene/config';
 
 // Components
 import VoidScene from './components/VoidScene';
 import CustomCursor from './components/CustomCursor';
+import SmoothScroll from './components/SmoothScroll';
 import FloatingControls from './components/FloatingControls';
 import GeminiTerminal from './components/GeminiTerminal';
 
@@ -24,22 +25,26 @@ import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
 
 const AppContent = () => {
+    console.log("[App] Component Mounting...");
+    const { scrollYProgress } = useScroll();
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-    const [isSceneReady, setIsSceneReady] = useState(false);
     const { isDark, toggleTheme } = useTheme();
+    const [isSceneReady, setIsSceneReady] = useState(false);
 
+    // FIX: Define handler outside of render loop to prevent infinite re-initialization of VoidScene
     const handleSceneReady = useCallback(() => {
+        console.log("[App] handleSceneReady called");
         setIsSceneReady(true);
     }, []);
 
-    // Safety timeout in case Three.js fails
+    // FIX: Safety timeout in case Three.js crashes
     useEffect(() => {
         const safetyTimer = setTimeout(() => {
             if (!isSceneReady) {
                 console.warn("[App] Scene failed to initialize, forcing ready.");
                 handleSceneReady();
             }
-        }, 3000);
+        }, 3000); // 3 seconds
         return () => clearTimeout(safetyTimer);
     }, [isSceneReady, handleSceneReady]);
 
@@ -48,7 +53,9 @@ const AppContent = () => {
         if (isSceneReady) {
             const loader = document.getElementById('loader');
             if (loader) {
+                console.log("[App] Hiding loader...");
                 loader.style.opacity = '0';
+                // Wait for fade out then display none
                 setTimeout(() => {
                     loader.style.display = 'none';
                 }, 500);
@@ -73,7 +80,7 @@ const AppContent = () => {
             </div>
 
             {/* 3D Background */}
-            <VoidScene onReady={handleSceneReady} />
+            <VoidScene scrollYProgress={scrollYProgress} onReady={handleSceneReady} />
 
             {/* Floating Controls */}
             <FloatingControls
@@ -85,25 +92,23 @@ const AppContent = () => {
             {/* Terminal Modal */}
             <GeminiTerminal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
 
-            {/* Main Content with GSAP Scroll */}
-            <GSAPScrollProvider>
-                <div className="w-full relative z-10 overflow-x-hidden">
-                    <main>
-                        <HomeSection />
-                        <HardwareSection />
-                        <ResearchSection />
-                        <ApplicationsSection />
-                        <EcosystemSection />
-                        <SecuritySection />
-                        <CloudSection />
-                        <EducationSection />
-                        <CommunitySection />
-                        <RoadmapSection />
-                        <ContactSection />
-                    </main>
-                    <Footer />
-                </div>
-            </GSAPScrollProvider>
+            {/* Main Content */}
+            <SmoothScroll>
+                <main>
+                    <HomeSection />
+                    <HardwareSection />
+                    <ResearchSection />
+                    <ApplicationsSection />
+                    <EcosystemSection />
+                    <SecuritySection />
+                    <CloudSection />
+                    <EducationSection />
+                    <CommunitySection />
+                    <RoadmapSection />
+                    <ContactSection />
+                </main>
+                <Footer />
+            </SmoothScroll>
         </div>
     );
 };

@@ -1,7 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from '../../context/ThemeContext';
 import { CONFIG } from './config';
 import {
@@ -18,28 +16,28 @@ import {
     generateCube
 } from './shapeGenerators';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const VoidScene = ({ onReady }) => {
+const VoidScene = ({ scrollYProgress, onReady }) => {
     const containerRef = useRef(null);
     const { isDark } = useTheme();
+
     const particleCountRef = useRef(3500);
-    const currentShapeRef = useRef(0);
-    const targetShapeRef = useRef(0);
-    const transitionProgressRef = useRef(1);
-    const colorRef = useRef({ r: 0, g: 0.95, b: 1 });
+    const resizeHandlerRef = useRef(null);
+
+    const updateParticleCount = useCallback(() => {
+        if (window && window.innerWidth) {
+            const count = window.innerWidth < 768 ? 1200 : 3500;
+            particleCountRef.current = count;
+            console.log(`[VoidScene] Updated particle count to ${count}`);
+        }
+    }, []);
 
     useEffect(() => {
+        console.log("[VoidScene] Initializing...");
+
         if (!containerRef.current) return;
+        while (containerRef.current.firstChild) containerRef.current.removeChild(containerRef.current.firstChild);
 
-        // Update particle count based on screen size
-        if (window && window.innerWidth) {
-            particleCountRef.current = window.innerWidth < 768 ? 1200 : 3500;
-        }
-
-        while (containerRef.current.firstChild) {
-            containerRef.current.removeChild(containerRef.current.firstChild);
-        }
+        updateParticleCount();
 
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(isDark ? 0x000000 : 0xF0F2F5, 0.015);
@@ -79,64 +77,16 @@ const VoidScene = ({ onReady }) => {
         const particles = new THREE.Points(geometry, material);
         scene.add(particles);
 
-        // Create scroll triggers for each section
-        const sections = gsap.utils.toArray('.section-snap');
-
-        sections.forEach((section, i) => {
-            ScrollTrigger.create({
-                trigger: section,
-                start: 'top center',
-                end: 'bottom center',
-                onEnter: () => {
-                    morphToShape(i);
-                },
-                onEnterBack: () => {
-                    morphToShape(i);
-                },
-            });
-        });
-
-        const morphToShape = (index) => {
-            if (index === targetShapeRef.current) return;
-
-            const validIndex = Math.min(index, shapes.length - 1);
-            targetShapeRef.current = validIndex;
-
-            // Animate transition progress
-            gsap.to(transitionProgressRef, {
-                current: 0,
-                duration: 0.1,
-                onComplete: () => {
-                    currentShapeRef.current = validIndex;
-                    gsap.to(transitionProgressRef, {
-                        current: 1,
-                        duration: 1.2,
-                        ease: 'power2.out',
-                    });
-                }
-            });
-
-            // Animate color
-            const targetColor = CONFIG.themes[validIndex].color;
-            gsap.to(colorRef.current, {
-                r: targetColor.r,
-                g: targetColor.g,
-                b: targetColor.b,
-                duration: 1.5,
-                ease: 'power2.out',
-            });
-        };
-
         const clock = new THREE.Clock();
         let mouseX = 0, mouseY = 0;
 
-        const onMouseMove = (e) => {
+        const onMM = (e) => {
             if (window) {
                 mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             }
         };
-        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousemove', onMM);
 
         const onTouch = (e) => {
             if (window && e.touches.length > 0) {
@@ -150,76 +100,67 @@ const VoidScene = ({ onReady }) => {
 
         const lerp = (s, e, t) => s * (1 - t) + e * t;
 
-        let animationFrameId;
         const animate = () => {
             const time = clock.getElapsedTime();
-            const positions = particles.geometry.attributes.position.array;
-            const targetShape = shapes[currentShapeRef.current];
-            const progress = transitionProgressRef.current;
+            const scroll = scrollYProgress.get();
+            const totalSections = CONFIG.themes.length;
 
-            // Smooth morphing with eased interpolation
-            const morphSpeed = 0.06 + (1 - progress) * 0.04;
+            const currentSegment = Math.min(Math.floor(scroll * (totalSections - 0.5)), totalSections - 1);
+            const targetShape = shapes[currentSegment];
+            const positions = particles.geometry.attributes.position.array;
 
             for (let i = 0; i < particleCountRef.current * 3; i++) {
-                positions[i] += (targetShape[i] - positions[i]) * morphSpeed;
+                positions[i] += (targetShape[i] - positions[i]) * 0.08;
             }
-
-            // Add subtle wave animation
             for (let i = 0; i < particleCountRef.current * 3; i += 3) {
-                positions[i + 1] += Math.sin(positions[i] * 0.1 + time * 1.5) * 0.015;
-                positions[i] += Math.cos(positions[i + 2] * 0.1 + time * 1.2) * 0.01;
+                positions[i + 1] += Math.sin(positions[i] * 0.1 + time * 1.5) * 0.02;
             }
-
             particles.geometry.attributes.position.needsUpdate = true;
 
-            // Update color smoothly
-            material.color.r = colorRef.current.r;
-            material.color.g = colorRef.current.g;
-            material.color.b = colorRef.current.b;
+            const currentTheme = CONFIG.themes[currentSegment];
+            material.color.r = lerp(material.color.r, currentTheme.color.r, 0.05);
+            material.color.g = lerp(material.color.g, currentTheme.color.g, 0.05);
+            material.color.b = lerp(material.color.b, currentTheme.color.b, 0.05);
 
-            // Rotation with mouse interaction
-            particles.rotation.y += 0.0008;
-            particles.rotation.x = lerp(particles.rotation.x, mouseY * 0.25, 0.03);
-            particles.rotation.z = lerp(particles.rotation.z, mouseX * 0.25, 0.03);
+            particles.rotation.y += 0.001;
+            particles.rotation.x = lerp(particles.rotation.x, mouseY * 0.3, 0.05);
+            particles.rotation.z = lerp(particles.rotation.z, mouseX * 0.3, 0.05);
+            if (currentSegment === 9) particles.rotation.z += 0.002;
 
             renderer.render(scene, camera);
-            animationFrameId = requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
         };
-        animationFrameId = requestAnimationFrame(animate);
+        const animationFrameId = requestAnimationFrame(animate);
 
         const handleResize = () => {
             if (window) {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                updateParticleCount();
             }
         };
         window.addEventListener('resize', handleResize);
 
         if (onReady) {
+            console.log("[VoidScene] Scene ready, signalling onReady.");
             onReady();
         }
 
         return () => {
             cancelAnimationFrame(animationFrameId);
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
             window.removeEventListener('resize', handleResize);
-            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mousemove', onMM);
             window.removeEventListener('touchmove', onTouch);
             if (containerRef.current && renderer.domElement && containerRef.current.contains(renderer.domElement)) {
                 containerRef.current.removeChild(renderer.domElement);
             }
-            geometry.dispose();
-            material.dispose();
-            renderer.dispose();
+            geometry.dispose(); material.dispose(); renderer.dispose();
         };
-    }, [isDark, onReady]);
+    }, [isDark, scrollYProgress, onReady, updateParticleCount]);
 
     return (
-        <div
-            ref={containerRef}
-            className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000"
-        />
+        <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000" />
     );
 };
 

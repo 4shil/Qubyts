@@ -1,7 +1,8 @@
 import { useTheme } from '../context/ThemeContext';
 import { Terminal, Command, Network, Layers } from 'lucide-react';
-import { GSAPTextReveal, GSAPStaggerCards } from '../components/animations/GSAPAnimations';
+import SplitTextReveal from '../components/animations/SplitTextReveal';
 import TiltCard from '../components/animations/TiltCard';
+import ZoomContainer from '../components/animations/ZoomContainer';
 
 const EcosystemSection = () => {
     const { isDark } = useTheme();
@@ -10,20 +11,20 @@ const EcosystemSection = () => {
         <section id="ecosystem" className="section-snap relative min-h-screen py-32 px-6 md:px-12 flex flex-col justify-center">
             <div className="max-w-[1600px] mx-auto w-full">
                 <div className="mb-24">
-                    <GSAPTextReveal
-                        className={`text-[8vw] md:text-[6rem] font-bold tracking-tighter leading-none block bg-clip-text text-transparent bg-gradient-to-br ${isDark
+                    <SplitTextReveal
+                        type="chars"
+                        className={`text-[8vw] md:text-[6rem] font-bold tracking-tighter text-white leading-none block bg-clip-text text-transparent bg-gradient-to-br ${isDark
                                 ? 'from-white via-indigo-200/50 to-indigo-500/10'
                                 : 'from-slate-900 via-indigo-700 to-indigo-200'
                             }`}
-                        stagger={0.05}
                     >
                         STACK
-                    </GSAPTextReveal>
+                    </SplitTextReveal>
                     <p className={`text-2xl mt-4 ${isDark ? 'text-indigo-200/60' : 'text-indigo-900/60'}`}>
                         Native quantum languages.
                     </p>
                 </div>
-                <GSAPStaggerCards className="grid grid-cols-1 md:grid-cols-4 gap-6" stagger={0.1}>
+                <ZoomContainer className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <TiltCard className={`${isDark ? 'bg-indigo-900/10' : 'bg-indigo-50/80'} col-span-2 row-span-2 min-h-[400px]`}>
                         <div className="flex flex-col justify-between h-full">
                             <Terminal className="text-indigo-400 mb-4 transition-transform duration-500" size={48} />
@@ -53,7 +54,7 @@ const EcosystemSection = () => {
                             <Layers className="text-indigo-400" size={32} />
                         </div>
                     </TiltCard>
-                </GSAPStaggerCards>
+                </ZoomContainer>
             </div>
         </section>
     );
