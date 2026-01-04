@@ -2,41 +2,142 @@
 @tailwind components;
 @tailwind utilities;
 
-body { 
-    font-family: 'Plus Jakarta Sans', sans-serif; 
+/* ===== BRUTALIST DESIGN SYSTEM ===== */
+:root {
+    --void-black: #030303;
+    --void-white: #f8f8f8;
+    --accent-cyan: #00f3ff;
+    --accent-magenta: #ff00ff;
+    --grid-gap: 1rem;
+    --section-height: 100vh;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     margin: 0;
-    background-color: #030303;
-    cursor: none; 
+    background-color: var(--void-black);
+    cursor: none;
+    overflow-x: hidden;
+}
+
+/* Scroll Snap Container */
+html {
+    scroll-behavior: auto;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
 }
 
 /* ACCESSIBILITY FIX: Restore system cursor on touch devices */
 @media (hover: none) and (pointer: coarse) {
-    body { cursor: auto !important; }
-    .cursor-dot, .cursor-ring { display: none !important; }
+    body {
+        cursor: auto !important;
+    }
+
+    .cursor-dot,
+    .cursor-ring {
+        display: none !important;
+    }
 }
 
-.font-mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-html { 
-    scroll-behavior: auto; 
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
 }
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* Custom Scrollbar - Brutalist */
+::-webkit-scrollbar {
+    width: 4px;
+}
 
-.cursor-scale { }
+::-webkit-scrollbar-track {
+    background: var(--void-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-cyan);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Section Snap */
+.section-snap {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: var(--section-height);
+}
+
+/* ===== BRUTALIST UTILITIES ===== */
+
+/* Hard geometric borders */
+.brutalist-border {
+    border: 2px solid currentColor;
+}
+
+/* Offset shadow for depth */
+.brutalist-shadow {
+    box-shadow: 4px 4px 0 currentColor;
+}
+
+.brutalist-shadow-lg {
+    box-shadow: 8px 8px 0 currentColor;
+}
+
+/* Tight typography */
+.tracking-brutal {
+    letter-spacing: -0.04em;
+}
+
+.tracking-brutal-tight {
+    letter-spacing: -0.06em;
+}
+
+/* Grain overlay */
+.grain-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Geometric accent lines */
+.accent-line {
+    position: relative;
+}
+
+.accent-line::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--accent-cyan);
+}
 
 /* Performance optimization */
 .will-animate {
     will-change: transform, opacity;
 }
 
-/* Section snap for scrolling */
-.section-snap {
-    scroll-snap-align: start;
+/* Cursor scale placeholder */
+.cursor-scale {}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+    html {
+        scroll-snap-type: y proximity;
+    }
+
+    .section-snap {
+        scroll-snap-stop: normal;
+    }
 }

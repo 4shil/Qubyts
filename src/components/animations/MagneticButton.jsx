@@ -1,8 +1,11 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useVoidScene } from '../VoidScene/context';
 
-const MagneticButton = ({ children, className = "", onClick }) => {
+const MagneticButton = ({ children, className = "", onClick, voidEffect }) => {
     const ref = useRef(null);
+    const { triggerEffect } = useVoidScene();
+
     const x = useMotionValue(0);
     const y = useMotionValue(0);
     const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
@@ -20,10 +23,25 @@ const MagneticButton = ({ children, className = "", onClick }) => {
 
     const handleMouseLeave = () => { x.set(0); y.set(0); };
 
+    const handleClick = (e) => {
+        // Trigger 3D effect if specified
+        if (voidEffect) {
+            triggerEffect(voidEffect);
+        }
+        // Call original onClick if provided
+        if (onClick) {
+            onClick(e);
+        }
+    };
+
     return (
         <motion.button
-            ref={ref} onClick={onClick} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}
-            style={{ x: springX, y: springY }} className={`relative cursor-scale will-animate ${className}`}
+            ref={ref}
+            onClick={handleClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ x: springX, y: springY }}
+            className={`relative cursor-scale will-animate ${className}`}
         >
             {children}
         </motion.button>

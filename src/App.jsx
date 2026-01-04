@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useScroll } from 'framer-motion';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { VoidSceneProvider } from './components/VoidScene/context';
 import { NOISE_SVG } from './components/VoidScene/config';
 
 // Components
@@ -31,31 +32,27 @@ const AppContent = () => {
     const { isDark, toggleTheme } = useTheme();
     const [isSceneReady, setIsSceneReady] = useState(false);
 
-    // FIX: Define handler outside of render loop to prevent infinite re-initialization of VoidScene
     const handleSceneReady = useCallback(() => {
         console.log("[App] handleSceneReady called");
         setIsSceneReady(true);
     }, []);
 
-    // FIX: Safety timeout in case Three.js crashes
     useEffect(() => {
         const safetyTimer = setTimeout(() => {
             if (!isSceneReady) {
                 console.warn("[App] Scene failed to initialize, forcing ready.");
                 handleSceneReady();
             }
-        }, 3000); // 3 seconds
+        }, 3000);
         return () => clearTimeout(safetyTimer);
     }, [isSceneReady, handleSceneReady]);
 
-    // Hide loader when scene is ready
     useEffect(() => {
         if (isSceneReady) {
             const loader = document.getElementById('loader');
             if (loader) {
                 console.log("[App] Hiding loader...");
                 loader.style.opacity = '0';
-                // Wait for fade out then display none
                 setTimeout(() => {
                     loader.style.display = 'none';
                 }, 500);
@@ -64,7 +61,7 @@ const AppContent = () => {
     }, [isSceneReady]);
 
     return (
-        <div className={`${isDark ? 'bg-[#030303] text-white selection:bg-cyan-500/30 selection:text-cyan-200' : 'bg-[#F0F2F5] text-slate-900 selection:bg-cyan-200 selection:text-cyan-900'} overflow-hidden transition-colors duration-1000`}>
+        <div className={`grain-overlay ${isDark ? 'bg-[#030303] text-white selection:bg-cyan-500/30 selection:text-cyan-200' : 'bg-[#F0F2F5] text-slate-900 selection:bg-cyan-200 selection:text-cyan-900'} overflow-hidden transition-colors duration-1000`}>
             {/* Noise overlay */}
             <div
                 className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-40"
@@ -111,7 +108,9 @@ const AppContent = () => {
 function App() {
     return (
         <ThemeProvider>
-            <AppContent />
+            <VoidSceneProvider>
+                <AppContent />
+            </VoidSceneProvider>
         </ThemeProvider>
     );
 }

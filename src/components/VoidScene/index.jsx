@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { useTheme } from '../../context/ThemeContext';
+import { useVoidScene } from './context';
 import { CONFIG } from './config';
 import {
     generateSphere,
@@ -19,15 +20,15 @@ import {
 const VoidScene = ({ scrollYProgress, onReady }) => {
     const containerRef = useRef(null);
     const { isDark } = useTheme();
+    const { activeEffect } = useVoidScene();
 
     const particleCountRef = useRef(3500);
-    const resizeHandlerRef = useRef(null);
+    const effectStateRef = useRef({ explode: 0, pulse: 0 });
 
     const updateParticleCount = useCallback(() => {
         if (window && window.innerWidth) {
             const count = window.innerWidth < 768 ? 1200 : 3500;
             particleCountRef.current = count;
-            console.log(`[VoidScene] Updated particle count to ${count}`);
         }
     }, []);
 
@@ -109,19 +110,53 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
             const targetShape = shapes[currentSegment];
             const positions = particles.geometry.attributes.position.array;
 
+            // === EFFECT HANDLERS ===
+            const effectState = effectStateRef.current;
+
+            // Decay effect intensities
+            effectState.explode *= 0.92;
+            effectState.pulse *= 0.94;
+
+            // Morph particles toward target shape
             for (let i = 0; i < particleCountRef.current * 3; i++) {
-                positions[i] += (targetShape[i] - positions[i]) * 0.08;
+                let target = targetShape[i];
+
+                // Explode effect: push particles outward
+                if (effectState.explode > 0.01) {
+                    const idx = Math.floor(i / 3);
+                    const px = positions[idx * 3];
+                    const py = positions[idx * 3 + 1];
+                    const pz = positions[idx * 3 + 2];
+                    const dist = Math.sqrt(px * px + py * py + pz * pz) || 1;
+                    target += (positions[i] / dist) * effectState.explode * 15;
+                }
+
+                positions[i] += (target - positions[i]) * 0.08;
             }
+
+            // Pulse effect: scale particles
+            if (effectState.pulse > 0.01) {
+                const pulseScale = 1 + effectState.pulse * 0.3;
+                particles.scale.setScalar(pulseScale);
+                material.opacity = Math.min(1, (isDark ? 0.85 : 0.9) + effectState.pulse * 0.3);
+            } else {
+                particles.scale.setScalar(1);
+                material.opacity = isDark ? 0.85 : 0.9;
+            }
+
+            // Wave animation
             for (let i = 0; i < particleCountRef.current * 3; i += 3) {
                 positions[i + 1] += Math.sin(positions[i] * 0.1 + time * 1.5) * 0.02;
             }
             particles.geometry.attributes.position.needsUpdate = true;
 
+            // Color interpolation
             const currentTheme = CONFIG.themes[currentSegment];
             material.color.r = lerp(material.color.r, currentTheme.color.r, 0.05);
             material.color.g = lerp(material.color.g, currentTheme.color.g, 0.05);
             material.color.b = lerp(material.color.b, currentTheme.color.b, 0.05);
 
+            // Rotation
             particles.rotation.y += 0.001;
             particles.rotation.x = lerp(particles.rotation.x, mouseY * 0.3, 0.05);
             particles.rotation.z = lerp(particles.rotation.z, mouseX * 0.3, 0.05);
@@ -158,6 +193,17 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
             geometry.dispose(); material.dispose(); renderer.dispose();
         };
     }, [isDark, scrollYProgress, onReady, updateParticleCount]);
+
+    // Listen for effect triggers from context
+    useEffect(() => {
+        if (activeEffect === 'explode') {
+            effectStateRef.current.explode = 1;
+            console.log("[VoidScene] Explode effect triggered");
+        } else if (activeEffect === 'pulse') {
+            effectStateRef.current.pulse = 1;
+            console.log("[VoidScene] Pulse effect triggered");
+        }
+    }, [activeEffect]);
 
     return (
         <div ref={containerRef} className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000" />

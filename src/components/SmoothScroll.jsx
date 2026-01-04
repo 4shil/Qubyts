@@ -28,7 +28,11 @@ const SmoothScroll = ({ children }) => {
         }
     }, []);
 
-    return <div className="w-full relative z-10 overflow-x-hidden">{children}</div>;
+    return (
+        <div className="w-full relative z-10 overflow-x-hidden">
+            {children}
+        </div>
+    );
 };
 
 export default SmoothScroll;
