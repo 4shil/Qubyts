@@ -71,13 +71,8 @@ const AppContent = () => {
                 style={{ backgroundImage: `url("${NOISE_SVG}")` }}
             />
 
-            {/* Custom cursor (desktop only) */}
-            <div
-                className="cursor-dot"
-                style={{ display: typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches ? 'none' : 'block' }}
-            >
-                <CustomCursor />
-            </div>
+            {/* Custom cursor */}
+            <CustomCursor />
 
             {/* 3D Background */}
             <VoidScene scrollYProgress={scrollYProgress} onReady={handleSceneReady} />
