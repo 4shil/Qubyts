@@ -49,18 +49,30 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         containerRef.current.appendChild(renderer.domElement);
 
+        // SEMANTIC SHAPE MAPPING
+        // 0: Home       → Sphere   (origin/potential)
+        // 1: Hardware   → Cube     (crystal lattice, precision)
+        // 2: Research   → Helix    (DNA of theory)
+        // 3: Applications → Torus  (molecular rings)
+        // 4: Ecosystem  → Network  (connected nodes)
+        // 5: Security   → Shield   (protective dome)
+        // 6: Cloud      → Nebula   (distributed vastness)
+        // 7: Education  → Pyramid  (building knowledge)
+        // 8: Community  → Ring     (unity circle)
+        // 9: Roadmap    → Tunnel   (forward journey)
+        // 10: Contact   → Sphere   (return to center)
         const shapes = [
-            generateSphere(particleCountRef.current),
-            generateGrid(particleCountRef.current),
-            generateTorus(particleCountRef.current),
-            generateHelix(particleCountRef.current),
-            generateNetwork(particleCountRef.current),
-            generateShield(particleCountRef.current),
-            generateNebula(particleCountRef.current),
-            generatePyramid(particleCountRef.current),
-            generateRing(particleCountRef.current),
-            generateTunnel(particleCountRef.current),
-            generateCube(particleCountRef.current)
+            generateSphere(particleCountRef.current),   // 0: Home
+            generateCube(particleCountRef.current),     // 1: Hardware
+            generateHelix(particleCountRef.current),    // 2: Research
+            generateTorus(particleCountRef.current),    // 3: Applications
+            generateNetwork(particleCountRef.current),  // 4: Ecosystem
+            generateShield(particleCountRef.current),   // 5: Security
+            generateNebula(particleCountRef.current),   // 6: Cloud
+            generatePyramid(particleCountRef.current),  // 7: Education
+            generateRing(particleCountRef.current),     // 8: Community
+            generateTunnel(particleCountRef.current),   // 9: Roadmap
+            generateSphere(particleCountRef.current),   // 10: Contact (converge)
         ];
 
         const geometry = new THREE.BufferGeometry();
@@ -113,15 +125,12 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
             // === EFFECT HANDLERS ===
             const effectState = effectStateRef.current;
 
-            // Decay effect intensities
             effectState.explode *= 0.92;
             effectState.pulse *= 0.94;
 
-            // Morph particles toward target shape
             for (let i = 0; i < particleCountRef.current * 3; i++) {
                 let target = targetShape[i];
 
-                // Explode effect: push particles outward
                 if (effectState.explode > 0.01) {
                     const idx = Math.floor(i / 3);
                     const px = positions[idx * 3];
@@ -134,7 +143,6 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
                 positions[i] += (target - positions[i]) * 0.08;
             }
 
-            // Pulse effect: scale particles
             if (effectState.pulse > 0.01) {
                 const pulseScale = 1 + effectState.pulse * 0.3;
                 particles.scale.setScalar(pulseScale);
@@ -144,19 +152,16 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
                 material.opacity = isDark ? 0.85 : 0.9;
             }
 
-            // Wave animation
             for (let i = 0; i < particleCountRef.current * 3; i += 3) {
                 positions[i + 1] += Math.sin(positions[i] * 0.1 + time * 1.5) * 0.02;
             }
             particles.geometry.attributes.position.needsUpdate = true;
 
-            // Color interpolation
             const currentTheme = CONFIG.themes[currentSegment];
             material.color.r = lerp(material.color.r, currentTheme.color.r, 0.05);
             material.color.g = lerp(material.color.g, currentTheme.color.g, 0.05);
             material.color.b = lerp(material.color.b, currentTheme.color.b, 0.05);
 
-            // Rotation
             particles.rotation.y += 0.001;
             particles.rotation.x = lerp(particles.rotation.x, mouseY * 0.3, 0.05);
             particles.rotation.z = lerp(particles.rotation.z, mouseX * 0.3, 0.05);
@@ -194,14 +199,11 @@ const VoidScene = ({ scrollYProgress, onReady }) => {
         };
     }, [isDark, scrollYProgress, onReady, updateParticleCount]);
 
-    // Listen for effect triggers from context
     useEffect(() => {
         if (activeEffect === 'explode') {
             effectStateRef.current.explode = 1;
-            console.log("[VoidScene] Explode effect triggered");
         } else if (activeEffect === 'pulse') {
             effectStateRef.current.pulse = 1;
-            console.log("[VoidScene] Pulse effect triggered");
         }
     }, [activeEffect]);
 

@@ -24,11 +24,9 @@ const MagneticButton = ({ children, className = "", onClick, voidEffect }) => {
     const handleMouseLeave = () => { x.set(0); y.set(0); };
 
     const handleClick = (e) => {
-        // Trigger 3D effect if specified
         if (voidEffect) {
             triggerEffect(voidEffect);
         }
-        // Call original onClick if provided
         if (onClick) {
             onClick(e);
         }
@@ -41,7 +39,8 @@ const MagneticButton = ({ children, className = "", onClick, voidEffect }) => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ x: springX, y: springY }}
-            className={`relative cursor-scale will-animate ${className}`}
+            className={`relative cursor-scale will-animate glow-hover focus-ring ${className}`}
+            whileTap={{ scale: 0.97 }}
         >
             {children}
         </motion.button>

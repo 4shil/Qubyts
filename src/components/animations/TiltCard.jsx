@@ -8,7 +8,7 @@ const TiltCard = ({ children, className = "", colSpan = 1, rowSpan = 1 }) => {
     const rotateX = useTransform(y, [-100, 100], [5, -5]);
     const rotateY = useTransform(x, [-100, 100], [-5, 5]);
 
-    const background = useMotionTemplate`radial-gradient(500px circle at ${x}px ${y}px, ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}, transparent 80%)`;
+    const spotlight = useMotionTemplate`radial-gradient(400px circle at ${x}px ${y}px, ${isDark ? 'rgba(0,243,255,0.15)' : 'rgba(79,70,229,0.1)'}, transparent 60%)`;
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -16,29 +16,36 @@ const TiltCard = ({ children, className = "", colSpan = 1, rowSpan = 1 }) => {
         const mouseY = e.clientY - rect.top;
         const xPct = mouseX / rect.width - 0.5;
         const yPct = mouseY / rect.height - 0.5;
-        x.set(xPct * 200);
-        y.set(yPct * 200);
+        x.set(mouseX);
+        y.set(mouseY);
     };
 
-    const handleMouseLeave = () => { x.set(0); y.set(0); };
-    const baseStyle = isDark ? 'border-white/10 bg-black/40 hover:border-white/20' : 'border-black/5 bg-white/60 hover:border-black/10 shadow-lg shadow-black/5';
+    const handleMouseLeave = () => { x.set(200); y.set(200); };
+
+    const baseStyle = isDark
+        ? 'border-white/10 bg-black/50 hover:border-cyan-500/30'
+        : 'border-black/5 bg-white/70 hover:border-cyan-500/40 shadow-lg shadow-black/5';
 
     return (
         <motion.div
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "50px" }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className={`group relative overflow-hidden rounded-3xl border backdrop-blur-md transition-colors duration-500 cursor-scale will-animate ${baseStyle} ${colSpan === 2 ? 'md:col-span-2' : 'md:col-span-1'} ${rowSpan === 2 ? 'md:row-span-2' : 'md:row-span-1'} ${className}`}
+            className={`group relative overflow-hidden border backdrop-blur-md transition-all duration-300 cursor-scale will-animate card-hover ${baseStyle} ${colSpan === 2 ? 'md:col-span-2' : 'md:col-span-1'} ${rowSpan === 2 ? 'md:row-span-2' : 'md:row-span-1'} ${className}`}
         >
+            {/* Spotlight effect on hover */}
             <motion.div
-                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100 z-0"
-                style={{ background }}
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0"
+                style={{ background: spotlight }}
             />
-            <div className="relative h-full p-8 flex flex-col z-10" style={{ transform: "translateZ(20px)" }}>{children}</div>
+            {/* Content with 3D lift */}
+            <div className="relative h-full flex flex-col z-10" style={{ transform: "translateZ(20px)" }}>
+                {children}
+            </div>
         </motion.div>
     );
 };

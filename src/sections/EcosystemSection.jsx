@@ -13,45 +13,42 @@ const EcosystemSection = () => {
                 <div className="mb-24">
                     <SplitTextReveal
                         type="chars"
-                        className={`text-[8vw] md:text-[6rem] font-bold tracking-tighter text-white leading-none block bg-clip-text text-transparent bg-gradient-to-br ${isDark
-                                ? 'from-white via-indigo-200/50 to-indigo-500/10'
-                                : 'from-slate-900 via-indigo-700 to-indigo-200'
+                        className={`text-[12vw] md:text-[8rem] font-bold tracking-brutal-tight leading-none block ${isDark ? 'text-white' : 'text-slate-900'
                             }`}
                     >
                         STACK
                     </SplitTextReveal>
-                    <p className={`text-2xl mt-4 ${isDark ? 'text-indigo-200/60' : 'text-indigo-900/60'}`}>
+                    <div className={`w-24 h-[3px] mt-4 ${isDark ? 'bg-indigo-500' : 'bg-indigo-600'}`} />
+                    <p className={`text-xl mt-6 font-light ${isDark ? 'text-white/60' : 'text-slate-600'}`}>
                         Native quantum languages.
                     </p>
                 </div>
-                <ZoomContainer className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <TiltCard className={`${isDark ? 'bg-indigo-900/10' : 'bg-indigo-50/80'} col-span-2 row-span-2 min-h-[400px]`}>
-                        <div className="flex flex-col justify-between h-full">
-                            <Terminal className="text-indigo-400 mb-4 transition-transform duration-500" size={48} />
+                <ZoomContainer className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <TiltCard className={`col-span-2 row-span-2 min-h-[400px] brutalist-border ${isDark ? 'bg-black border-indigo-500/50' : 'bg-white border-indigo-300'}`}>
+                        <div className="flex flex-col justify-between h-full p-8">
+                            <Terminal className="text-indigo-400" size={40} />
                             <div>
-                                <h3 className={`text-4xl font-medium mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Q-OS</h3>
+                                <h3 className={`text-4xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>Q-OS</h3>
                                 <p className={`text-lg ${isDark ? 'text-white/60' : 'text-slate-600'}`}>
                                     Operating system built for entanglement natively.
                                 </p>
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={isDark ? 'bg-indigo-900/5' : 'bg-indigo-50/50'}>
-                        <Command className="text-indigo-400 mb-4" />
-                        <h3 className={`text-2xl mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Orbital</h3>
+                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                        <Command className="text-indigo-400 mb-4" size={24} />
+                        <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Orbital</h3>
                         <p className={`text-sm ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Hardware drivers.</p>
                     </TiltCard>
-                    <TiltCard className={isDark ? 'bg-indigo-900/5' : 'bg-indigo-50/50'}>
-                        <Network className="text-indigo-400 mb-4" />
-                        <h3 className={`text-2xl mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Kernels</h3>
+                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                        <Network className="text-indigo-400 mb-4" size={24} />
+                        <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Kernels</h3>
                         <p className={`text-sm ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Virtualization.</p>
                     </TiltCard>
-                    <TiltCard colSpan={2} className={isDark ? 'bg-indigo-900/5' : 'bg-indigo-50/50'}>
+                    <TiltCard colSpan={2} className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
                         <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className={`text-2xl mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>App Store</h3>
-                            </div>
-                            <Layers className="text-indigo-400" size={32} />
+                            <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>App Store</h3>
+                            <Layers className="text-indigo-400" size={24} />
                         </div>
                     </TiltCard>
                 </ZoomContainer>
