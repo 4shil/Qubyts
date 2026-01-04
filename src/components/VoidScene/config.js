@@ -1,18 +1,25 @@
-// VoidScene Configuration
+// VoidScene Configuration - v2.0 (17 scenes)
 export const CONFIG = {
     particleSize: 0.18,
+    // 17 sections with semantic colors
     themes: [
-        { color: { r: 0, g: 0.95, b: 1 }, id: 'home' },
-        { color: { r: 0.6, g: 0.2, b: 1 }, id: 'hardware' },
-        { color: { r: 0.2, g: 1, b: 0.6 }, id: 'research' },
-        { color: { r: 1, g: 0.2, b: 0.4 }, id: 'applications' },
-        { color: { r: 0.3, g: 0.4, b: 1 }, id: 'ecosystem' },
-        { color: { r: 1, g: 0.6, b: 0.2 }, id: 'security' },
-        { color: { r: 0.2, g: 0.8, b: 1 }, id: 'cloud' },
-        { color: { r: 1, g: 0.8, b: 0.2 }, id: 'education' },
-        { color: { r: 0.2, g: 0.9, b: 0.8 }, id: 'community' },
-        { color: { r: 0.9, g: 0.2, b: 0.9 }, id: 'roadmap' },
-        { color: { r: 1, g: 1, b: 1 }, id: 'contact' },
+        { color: { r: 0, g: 0.95, b: 1 }, id: 'hero' },           // Cyan
+        { color: { r: 0.6, g: 0.2, b: 1 }, id: 'philosophy' },    // Purple
+        { color: { r: 0.5, g: 0.3, b: 1 }, id: 'hardware' },      // Violet
+        { color: { r: 0.2, g: 1, b: 0.6 }, id: 'qos' },           // Green
+        { color: { r: 0.3, g: 0.4, b: 1 }, id: 'developer' },     // Indigo
+        { color: { r: 0.2, g: 0.8, b: 1 }, id: 'cloud' },         // Sky
+        { color: { r: 1, g: 0.6, b: 0.2 }, id: 'security' },      // Orange
+        { color: { r: 0.2, g: 0.9, b: 0.6 }, id: 'research' },    // Emerald
+        { color: { r: 1, g: 0.3, b: 0.4 }, id: 'applications' },  // Rose
+        { color: { r: 0.9, g: 0.2, b: 0.9 }, id: 'roadmap' },     // Fuchsia
+        { color: { r: 0.2, g: 0.9, b: 0.8 }, id: 'community' },   // Teal
+        { color: { r: 0.9, g: 0.9, b: 0.95 }, id: 'contact' },    // Soft White
+        { color: { r: 0.4, g: 0.8, b: 1 }, id: 'quantum-fabric' },// Light Cyan
+        { color: { r: 0.7, g: 0.3, b: 0.5 }, id: 'decoherence' }, // Muted Magenta
+        { color: { r: 0.5, g: 0.5, b: 0.9 }, id: 'quantum-classical' }, // Lavender
+        { color: { r: 1, g: 0.9, b: 0.7 }, id: 'ethics' },        // Warm White
+        { color: { r: 0.1, g: 0.1, b: 0.2 }, id: 'shutdown' },    // Deep Void
     ]
 };
 
