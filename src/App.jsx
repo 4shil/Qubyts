@@ -1,34 +1,39 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { NOISE_SVG } from './components/VoidScene/config';
 import useAppStore from './store/useAppStore';
 
-// Components
-import VoidScene from './components/VoidScene';
-import Squares from './components/Squares';
+// Lazy load heavy components
+const VoidScene = lazy(() => import('./components/VoidScene'));
+const LiquidEther = lazy(() => import('./components/LiquidEther'));
+const CommandPalette = lazy(() => import('./components/CommandPalette'));
+const GeminiTerminal = lazy(() => import('./components/GeminiTerminal'));
+
+// Immediate load for critical UI
 import CustomCursor from './components/CustomCursor';
 import MicroNav from './components/MicroNav';
 import ScrollProgress from './components/ScrollProgress';
-import CommandPalette from './components/CommandPalette';
-import GeminiTerminal from './components/GeminiTerminal';
 
-// Sections (v2.0 - 17 sections)
-import HomeSection from './sections/HomeSection';
-import PhilosophySection from './sections/PhilosophySection';
-import HardwareSection from './sections/HardwareSection';
-import QOSSection from './sections/QOSSection';
-import DeveloperSection from './sections/DeveloperSection';
-import CloudSection from './sections/CloudSection';
-import SecuritySection from './sections/SecuritySection';
-import ResearchSection from './sections/ResearchSection';
-import ApplicationsSection from './sections/ApplicationsSection';
-import RoadmapSection from './sections/RoadmapSection';
-import CommunitySection from './sections/CommunitySection';
-import ContactSection from './sections/ContactSection';
-import Footer from './sections/Footer';
+// Lazy load sections for code splitting
+const HomeSection = lazy(() => import('./sections/HomeSection'));
+const PhilosophySection = lazy(() => import('./sections/PhilosophySection'));
+const HardwareSection = lazy(() => import('./sections/HardwareSection'));
+const QOSSection = lazy(() => import('./sections/QOSSection'));
+const DeveloperSection = lazy(() => import('./sections/DeveloperSection'));
+const CloudSection = lazy(() => import('./sections/CloudSection'));
+const SecuritySection = lazy(() => import('./sections/SecuritySection'));
+const ResearchSection = lazy(() => import('./sections/ResearchSection'));
+const ApplicationsSection = lazy(() => import('./sections/ApplicationsSection'));
+const RoadmapSection = lazy(() => import('./sections/RoadmapSection'));
+const CommunitySection = lazy(() => import('./sections/CommunitySection'));
+const ContactSection = lazy(() => import('./sections/ContactSection'));
+const Footer = lazy(() => import('./sections/Footer'));
+
+// Minimal loading fallback
+const SectionLoader = () => <div className="section-snap" />;
 
 const AppContent = () => {
-    console.log("[App v2.0] Mounting with Squares background...");
+    console.log("[App v2.0] Mounting with performance optimizations...");
     const containerRef = useRef(null);
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
     const { isDark } = useTheme();
@@ -48,7 +53,7 @@ const AppContent = () => {
         setIsSceneReady(true);
     }, []);
 
-    // Safety timeout for loader
+    // Safety timeout
     useEffect(() => {
         const safetyTimer = setTimeout(() => {
             if (!isSceneReady) {
@@ -59,7 +64,7 @@ const AppContent = () => {
         return () => clearTimeout(safetyTimer);
     }, [isSceneReady, handleSceneReady]);
 
-    // Hide loader when ready
+    // Hide loader
     useEffect(() => {
         if (isSceneReady) {
             const loader = document.getElementById('loader');
@@ -70,52 +75,52 @@ const AppContent = () => {
         }
     }, [isSceneReady]);
 
-    // Keyboard navigation (↑ ↓ PgUp PgDn Space)
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (isScrollLocked) return;
-            if (useAppStore.getState().commandPaletteOpen) return;
+    // Keyboard navigation - memoized handler
+    const handleKeyDown = useCallback((e) => {
+        if (isScrollLocked) return;
+        if (useAppStore.getState().commandPaletteOpen) return;
 
-            switch (e.key) {
-                case 'ArrowDown':
-                case 'PageDown':
-                case ' ':
-                    e.preventDefault();
-                    navigateNext();
-                    break;
-                case 'ArrowUp':
-                case 'PageUp':
-                    e.preventDefault();
-                    navigatePrev();
-                    break;
-                default:
-                    break;
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        switch (e.key) {
+            case 'ArrowDown':
+            case 'PageDown':
+            case ' ':
+                e.preventDefault();
+                navigateNext();
+                break;
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault();
+                navigatePrev();
+                break;
+            default:
+                break;
+        }
     }, [navigateNext, navigatePrev, isScrollLocked]);
 
-    // Wheel navigation (one section per scroll)
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [handleKeyDown]);
+
+    // Wheel navigation - throttled
     useEffect(() => {
         let wheelTimeout = null;
+        let lastWheelTime = 0;
 
         const handleWheel = (e) => {
+            const now = performance.now();
+            if (now - lastWheelTime < 600) return;
+
             if (isScrollLocked) {
                 e.preventDefault();
                 return;
             }
 
-            if (wheelTimeout) return;
-
-            wheelTimeout = setTimeout(() => {
-                wheelTimeout = null;
-            }, 600);
-
             if (e.deltaY > 30) {
+                lastWheelTime = now;
                 navigateNext();
             } else if (e.deltaY < -30) {
+                lastWheelTime = now;
                 navigatePrev();
             }
         };
@@ -132,7 +137,7 @@ const AppContent = () => {
         };
     }, [navigateNext, navigatePrev, isScrollLocked]);
 
-    // Scroll observer to sync currentSection
+    // Intersection observer - memoized
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
@@ -160,54 +165,73 @@ const AppContent = () => {
         return () => observer.disconnect();
     }, [sections, currentSection, setCurrentSection]);
 
+    // Memoized LiquidEther config
+    const liquidEtherConfig = useMemo(() => ({
+        colors: ['#5227FF', '#FF9FFC', '#B19EEF'],
+        mouseForce: 43,
+        cursorSize: 65,
+        viscous: 26,
+        iterationsPoisson: 6,
+        resolution: 0.3,
+        isBounce: true,
+        autoSpeed: 0.25,
+        autoIntensity: 3
+    }), []);
+
     return (
         <div className={`grain-overlay ${isDark ? 'bg-[#020202] text-white' : 'bg-[#FAFAFA] text-slate-900'}`}>
-            {/* Squares Grid Background */}
+            {/* LiquidEther Fluid Background */}
             <div className="fixed inset-0 z-0">
-                <Squares
-                    speed={0.5}
-                    squareSize={40}
-                    direction="diagonal"
-                    borderColor={isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}
-                    hoverFillColor={isDark ? 'rgba(0,243,255,0.08)' : 'rgba(79,70,229,0.08)'}
-                />
+                <Suspense fallback={null}>
+                    <LiquidEther {...liquidEtherConfig} />
+                </Suspense>
             </div>
 
-            {/* 3D Particle System (layered above squares) */}
-            <VoidScene currentSection={currentSection} onReady={handleSceneReady} />
+            {/* 3D Particle System */}
+            <Suspense fallback={null}>
+                <VoidScene currentSection={currentSection} onReady={handleSceneReady} />
+            </Suspense>
 
             {/* Noise overlay */}
             <div
-                className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-30"
+                className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-15"
                 style={{ backgroundImage: `url("${NOISE_SVG}")` }}
             />
 
-            {/* Navigation */}
+            {/* Navigation - Critical, not lazy */}
             <MicroNav />
             <ScrollProgress />
-            <CommandPalette />
+
+            {/* Command Palette - Lazy */}
+            <Suspense fallback={null}>
+                <CommandPalette />
+            </Suspense>
 
             {/* Custom cursor */}
             <CustomCursor />
 
-            {/* Terminal Modal */}
-            <GeminiTerminal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
+            {/* Terminal Modal - Lazy */}
+            <Suspense fallback={null}>
+                <GeminiTerminal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
+            </Suspense>
 
-            {/* Main Content - Snap Container */}
+            {/* Main Content - All sections lazy loaded */}
             <div ref={containerRef} className="snap-container">
-                <HomeSection />
-                <PhilosophySection />
-                <HardwareSection />
-                <QOSSection />
-                <DeveloperSection />
-                <CloudSection />
-                <SecuritySection />
-                <ResearchSection />
-                <ApplicationsSection />
-                <RoadmapSection />
-                <CommunitySection />
-                <ContactSection />
-                <Footer />
+                <Suspense fallback={<SectionLoader />}>
+                    <HomeSection />
+                    <PhilosophySection />
+                    <HardwareSection />
+                    <QOSSection />
+                    <DeveloperSection />
+                    <CloudSection />
+                    <SecuritySection />
+                    <ResearchSection />
+                    <ApplicationsSection />
+                    <RoadmapSection />
+                    <CommunitySection />
+                    <ContactSection />
+                    <Footer />
+                </Suspense>
             </div>
         </div>
     );

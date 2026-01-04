@@ -30,14 +30,14 @@ const VoidScene = ({ currentSection, onReady }) => {
     const { isDark } = useTheme();
     const { activeEffect, isReducedMotion } = useAppStore();
 
-    const particleCountRef = useRef(4000);
+    const particleCountRef = useRef(2500);
     const effectStateRef = useRef({ explode: 0, pulse: 0, collapse: 0, freeze: false });
     const breathingRef = useRef(0);
     const prevSectionRef = useRef(0);
 
     const updateParticleCount = useCallback(() => {
         if (typeof window !== 'undefined' && window.innerWidth) {
-            const count = window.innerWidth < 768 ? 1500 : 4000;
+            const count = window.innerWidth < 768 ? 1000 : 2500;
             particleCountRef.current = count;
         }
     }, []);
@@ -62,7 +62,7 @@ const VoidScene = ({ currentSection, onReady }) => {
             powerPreference: 'high-performance'
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         containerRef.current.appendChild(renderer.domElement);
 
         // Generate all 17 shapes (discrete states)
