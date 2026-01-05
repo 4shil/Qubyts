@@ -34,6 +34,11 @@ export default function LiquidEther({
     const isVisibleRef = useRef(true);
     const resizeRafRef = useRef(null);
 
+    // Color lerping refs to avoid re-renders
+    const targetColorsRef = useRef(colors);
+    const currentColorsRef = useRef(null);
+    const paletteTexRef = useRef(null);
+
     useEffect(() => {
         if (!mountRef.current) return;
 
@@ -64,6 +69,65 @@ export default function LiquidEther({
         }
 
         const paletteTex = makePaletteTexture(colors);
+        paletteTexRef.current = paletteTex;
+
+        // Initialize current colors for lerping (store as THREE.Color objects)
+        if (!currentColorsRef.current) {
+            const arr = Array.isArray(colors) && colors.length > 0
+                ? (colors.length === 1 ? [colors[0], colors[0]] : colors)
+                : ['#ffffff', '#ffffff'];
+            currentColorsRef.current = arr.map(c => new THREE.Color(c));
+        }
+
+        // Function to update palette texture with lerped colors
+        const updatePaletteTexture = () => {
+            if (!paletteTexRef.current || !currentColorsRef.current) return;
+
+            const targetArr = Array.isArray(targetColorsRef.current) && targetColorsRef.current.length > 0
+                ? (targetColorsRef.current.length === 1 ? [targetColorsRef.current[0], targetColorsRef.current[0]] : targetColorsRef.current)
+                : ['#ffffff', '#ffffff'];
+
+            // Ensure current colors array matches target length
+            while (currentColorsRef.current.length < targetArr.length) {
+                currentColorsRef.current.push(new THREE.Color(targetArr[currentColorsRef.current.length]));
+            }
+
+            const lerpSpeed = 0.04; // Smooth transition speed
+            let needsUpdate = false;
+
+            for (let i = 0; i < Math.min(currentColorsRef.current.length, targetArr.length); i++) {
+                const target = new THREE.Color(targetArr[i]);
+                const current = currentColorsRef.current[i];
+
+                // Check if colors differ
+                if (Math.abs(current.r - target.r) > 0.001 ||
+                    Math.abs(current.g - target.g) > 0.001 ||
+                    Math.abs(current.b - target.b) > 0.001) {
+                    current.lerp(target, lerpSpeed);
+                    needsUpdate = true;
+                }
+            }
+
+            if (needsUpdate) {
+                const w = currentColorsRef.current.length;
+                const data = new Uint8Array(w * 4);
+                for (let i = 0; i < w; i++) {
+                    const c = currentColorsRef.current[i];
+                    data[i * 4 + 0] = Math.round(c.r * 255);
+                    data[i * 4 + 1] = Math.round(c.g * 255);
+                    data[i * 4 + 2] = Math.round(c.b * 255);
+                    data[i * 4 + 3] = 255;
+                }
+
+                // Update texture data in place
+                const tex = paletteTexRef.current;
+                if (tex.image && tex.image.data) {
+                    tex.image.data.set(data);
+                    tex.needsUpdate = true;
+                }
+            }
+        };
+
         const bgVec4 = new THREE.Vector4(0, 0, 0, 0);
 
         class CommonClass {
@@ -552,7 +616,7 @@ export default function LiquidEther({
             _resize = () => this.resize();
             init() { if (Common.renderer) { this.props.$wrapper.prepend(Common.renderer.domElement); this.output = new Output(); } }
             resize() { Common.resize(); this.output.resize(); }
-            render() { if (this.autoDriver) this.autoDriver.update(); Mouse.update(); Common.update(); this.output.update(); }
+            render() { if (this.autoDriver) this.autoDriver.update(); Mouse.update(); Common.update(); updatePaletteTexture(); this.output.update(); }
             loop = () => { if (!this.running) return; this.render(); rafRef.current = requestAnimationFrame(this.loop); };
             start() { if (this.running) return; this.running = true; this.loop(); }
             pause() { this.running = false; if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; } }
@@ -599,7 +663,12 @@ export default function LiquidEther({
             webglRef.current?.dispose();
             webglRef.current = null;
         };
-    }, [BFECC, cursorSize, dt, isBounce, isViscous, iterationsPoisson, iterationsViscous, mouseForce, resolution, viscous, colors, autoDemo, autoSpeed, autoIntensity, takeoverDuration, autoResumeDelay, autoRampDuration]);
+    }, [BFECC, cursorSize, dt, isBounce, isViscous, iterationsPoisson, iterationsViscous, mouseForce, resolution, viscous, autoDemo, autoSpeed, autoIntensity, takeoverDuration, autoResumeDelay, autoRampDuration]);
+
+    // Update target colors ref when colors prop changes (no re-render of WebGL)
+    useEffect(() => {
+        targetColorsRef.current = colors;
+    }, [colors]);
 
     return <div ref={mountRef} className={`liquid-ether-container ${className}`} style={style} />;
 }

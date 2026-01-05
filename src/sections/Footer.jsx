@@ -8,7 +8,7 @@ const Footer = () => {
     const { navigateTo } = useAppStore();
 
     return (
-        <footer id="contact" className={`section-snap w-full flex flex-col items-center justify-center relative z-10 ${isDark ? 'bg-black' : 'bg-white'}`}>
+        <footer id="footer" className={`w-full py-16 flex flex-col items-center justify-center relative z-10 ${isDark ? 'bg-black' : 'bg-white'}`}>
             <div className="flex flex-col items-center justify-center gap-6">
                 <Atom size={32} className={isDark ? 'text-white/20' : 'text-black/20'} />
                 <div className={`w-16 h-[2px] ${isDark ? 'bg-cyan-500' : 'bg-cyan-600'}`} />

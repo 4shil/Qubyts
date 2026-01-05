@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Q-SYSTEMS v2.0 — FORCED SCROLL SNAPPING ===== */
+/* ===== Q-SYSTEMS v2.0 — SMOOTH SCROLL SNAPPING ===== */
 :root {
     --void-black: #020202;
     --ion-white: #FAFAFA;
@@ -25,31 +25,24 @@ body {
     cursor: none;
     overflow-x: hidden;
     overflow-y: hidden;
-    /* Prevent default scroll */
 }
 
-/* FORCED SCROLL SNAPPING — No smooth scroll */
 html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
     overflow: hidden;
 }
 
-/* Main scroll container with mandatory snapping */
+/* Main scroll container with SMOOTH mandatory snapping */
 .snap-container {
     height: 100vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-    scroll-behavior: auto;
-    -webkit-overflow-scrolling: auto;
-    /* Disable momentum */
-}
-
-/* Prevent overscroll bounce */
-.snap-container {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
 }
 
-/* Each section is exactly 100vh */
+/* Each section is exactly 100vh with performance optimizations */
 .section-snap {
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -57,6 +50,8 @@ html {
     min-height: 100vh;
     max-height: 100vh;
     overflow: hidden;
+    contain: layout style paint;
+    will-change: transform;
 }
 
 /* ACCESSIBILITY */
@@ -79,6 +74,7 @@ html {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
 
