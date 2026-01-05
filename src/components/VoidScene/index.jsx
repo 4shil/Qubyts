@@ -21,16 +21,21 @@ import {
     generateDuality,
     generateHalo,
     generateSingularity,
+    clearShapeCache,
 } from './shapeGenerators';
+
+// Clear shape cache on load to ensure new sizes take effect
+clearShapeCache();
 
 const VoidScene = ({ currentSection, onReady }) => {
     const containerRef = useRef(null);
     const { isDark } = useTheme();
     const { activeEffect, isReducedMotion } = useAppStore();
 
+    // Increased particle count for cinematic effect
     const particleCount = useMemo(() => {
-        if (typeof window === 'undefined') return 1500;
-        return window.innerWidth < 768 ? 800 : 1500;
+        if (typeof window === 'undefined') return 4000;
+        return window.innerWidth < 768 ? 2000 : 4500;
     }, []);
 
     const effectStateRef = useRef({ explode: 0, pulse: 0, collapse: 0, freeze: false });
@@ -66,10 +71,10 @@ const VoidScene = ({ currentSection, onReady }) => {
         }
 
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(isDark ? 0x020202 : 0xFAFAFA, 0.008);
+        scene.fog = new THREE.FogExp2(isDark ? 0x020202 : 0xFAFAFA, 0.004);
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 35;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 28;
 
         const renderer = new THREE.WebGLRenderer({
             alpha: true,

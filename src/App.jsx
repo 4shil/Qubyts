@@ -6,7 +6,6 @@ import Lenis from '@studio-freight/lenis';
 
 // EAGER LOAD ALL COMPONENTS - No lazy loading
 import VoidScene from './components/VoidScene';
-import LiquidEther from './components/LiquidEther';
 import CommandPalette from './components/CommandPalette';
 import GeminiTerminal from './components/GeminiTerminal';
 import CustomCursor from './components/CustomCursor';
@@ -179,18 +178,21 @@ const AppContent = () => {
         return () => observer.disconnect();
     }, [sections, currentSection, setCurrentSection]);
 
-    // Lenis smooth scroll
+    // Lenis smooth scroll - configured for scroll-snap
     useEffect(() => {
         const lenis = new Lenis({
             wrapper: containerRef.current,
             content: containerRef.current,
-            duration: 1.2,
+            lerp: 0.1,
+            duration: 1.0,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 2,
+            syncTouch: true,
+            syncTouchLerp: 0.075,
+            wheelMultiplier: 0.8,
+            touchMultiplier: 1.5,
         });
 
         function raf(time) {
@@ -202,29 +204,10 @@ const AppContent = () => {
         return () => lenis.destroy();
     }, []);
 
-    // LiquidEther colors - direct from currentSection (lerping happens inside LiquidEther)
-    const liquidEtherColors = useMemo(() => {
-        return getSectionColors(currentSection);
-    }, [currentSection]);
 
     return (
         <div className={`grain-overlay ${isDark ? 'bg-[#020202] text-white' : 'bg-[#FAFAFA] text-slate-900'}`}>
-            {/* LiquidEther Fluid Background */}
-            <div className="fixed inset-0 z-0">
-                <LiquidEther
-                    colors={liquidEtherColors}
-                    mouseForce={30}
-                    cursorSize={50}
-                    viscous={20}
-                    iterationsPoisson={4}
-                    resolution={0.2}
-                    isBounce
-                    autoSpeed={0.2}
-                    autoIntensity={2}
-                />
-            </div>
-
-            {/* 3D Particle System */}
+            {/* 3D Particle System - Full screen cinematic */}
             <VoidScene currentSection={currentSection} onReady={handleSceneReady} />
 
             {/* Noise overlay */}

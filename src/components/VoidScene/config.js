@@ -1,7 +1,7 @@
 // VoidScene Configuration - v2.0 (17 scenes)
 // RGB colors for Three.js (0-1 range)
 export const CONFIG = {
-    particleSize: 0.18,
+    particleSize: 0.22,
     // 17 sections with semantic colors
     themes: [
         { color: { r: 0, g: 0.95, b: 1 }, id: 'hero' },           // Cyan
