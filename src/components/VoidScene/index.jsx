@@ -73,8 +73,17 @@ const VoidScene = ({ currentSection, onReady }) => {
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(isDark ? 0x020202 : 0xFAFAFA, 0.004);
 
+        // Responsive camera distance to keep objects in view
+        const getZPos = () => {
+            const width = window.innerWidth;
+            // Further back for smaller screens to fit the width
+            if (width < 768) return 85;
+            if (width < 1200) return 60;
+            return 45;
+        };
+
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 28;
+        camera.position.z = getZPos();
 
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
