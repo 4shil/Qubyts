@@ -102,53 +102,13 @@ const AppContent = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleKeyDown]);
 
-    // Wheel navigation - smooth scroll
+    // Wheel navigation - REMOVED to prevent conflict with Lenis and fix flickering/zooming issues
+    // Native scroll + Lenis provides the smooth transition requested
+    /*
     useEffect(() => {
-        let isScrolling = false;
-
-        const handleWheel = (e) => {
-            if (isScrollLocked || isScrolling) {
-                e.preventDefault();
-                return;
-            }
-
-            const threshold = 50;
-            if (Math.abs(e.deltaY) < threshold) return;
-
-            isScrolling = true;
-            e.preventDefault();
-
-            let targetIndex = currentSection;
-            if (e.deltaY > 0 && currentSection < sections.length - 1) {
-                targetIndex = currentSection + 1;
-            } else if (e.deltaY < 0 && currentSection > 0) {
-                targetIndex = currentSection - 1;
-            }
-
-            if (targetIndex !== currentSection) {
-                const targetEl = document.getElementById(sections[targetIndex].id);
-                if (targetEl) {
-                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    setCurrentSection(targetIndex);
-                }
-            }
-
-            setTimeout(() => {
-                isScrolling = false;
-            }, 800);
-        };
-
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener('wheel', handleWheel, { passive: false });
-        }
-
-        return () => {
-            if (container) {
-                container.removeEventListener('wheel', handleWheel);
-            }
-        };
-    }, [isScrollLocked, currentSection, sections, setCurrentSection]);
+        // [Logic removed]
+    }, []);
+    */
 
     // Intersection observer
     useEffect(() => {
