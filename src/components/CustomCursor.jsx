@@ -13,9 +13,9 @@ const CustomCursor = () => {
     const mouseX = useMotionValue(-100);
     const mouseY = useMotionValue(-100);
 
-    // Smooth position (for the ring)
-    const smoothX = useSpring(mouseX, { stiffness: 250, damping: 30, mass: 0.5 });
-    const smoothY = useSpring(mouseY, { stiffness: 250, damping: 30, mass: 0.5 });
+    // Smooth position (for the ring) - Tightened for real-time response
+    const smoothX = useSpring(mouseX, { stiffness: 600, damping: 40, mass: 0.2 });
+    const smoothY = useSpring(mouseY, { stiffness: 600, damping: 40, mass: 0.2 });
 
     useEffect(() => {
         // Hide if touch device
@@ -131,7 +131,7 @@ const CustomCursor = () => {
                         }}
                         animate={{ scale: 2.2, opacity: 0 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
                     />
                 )}
             </AnimatePresence>

@@ -24,7 +24,7 @@ const ResearchSection = () => {
                     <div className="max-w-xl text-right mt-6">
                         <SplitTextReveal
                             type="words"
-                            delay={0.2}
+                            delay={0.05}
                             className={`text-xl leading-tight block font-light ${isDark ? 'text-white/60' : 'text-slate-600'}`}
                         >
                             Defying probability. Braiding spacetime to create logical qubits.

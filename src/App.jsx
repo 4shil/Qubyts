@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, memo } from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { NOISE_SVG, getSectionColors } from './components/VoidScene/config';
 import useAppStore from './store/useAppStore';
@@ -32,21 +32,40 @@ import EthicsSection from './sections/EthicsSection';
 import ShutdownSection from './sections/ShutdownSection';
 import Footer from './sections/Footer';
 
+// Memoize sections to prevent total-app re-renders during scroll
+const MemoHome = memo(HomeSection);
+const MemoPhilosophy = memo(PhilosophySection);
+const MemoHardware = memo(HardwareSection);
+const MemoQOS = memo(QOSSection);
+const MemoDeveloper = memo(DeveloperSection);
+const MemoCloud = memo(CloudSection);
+const MemoSecurity = memo(SecuritySection);
+const MemoResearch = memo(ResearchSection);
+const MemoApplications = memo(ApplicationsSection);
+const MemoRoadmap = memo(RoadmapSection);
+const MemoCommunity = memo(CommunitySection);
+const MemoContact = memo(ContactSection);
+const MemoQuantumFabric = memo(QuantumFabricSection);
+const MemoDecoherence = memo(DecoherenceSection);
+const MemoQuantumClassical = memo(QuantumClassicalSection);
+const MemoEthics = memo(EthicsSection);
+const MemoShutdown = memo(ShutdownSection);
+
+const MemoVoidScene = memo(VoidScene);
+
 const AppContent = () => {
-    console.log("[App v2.0] All components eagerly loaded...");
     const containerRef = useRef(null);
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-    const { isDark } = useTheme();
     const [isSceneReady, setIsSceneReady] = useState(false);
+    const lenisRef = useRef(null);
+    const { isDark } = useTheme();
 
-    const {
-        currentSection,
-        setCurrentSection,
-        navigateNext,
-        navigatePrev,
-        isScrollLocked,
-        sections
-    } = useAppStore();
+    const currentSection = useAppStore(state => state.currentSection);
+    const setCurrentSection = useAppStore(state => state.setCurrentSection);
+    const navigateNext = useAppStore(state => state.navigateNext);
+    const navigatePrev = useAppStore(state => state.navigatePrev);
+    const isScrollLocked = useAppStore(state => state.isScrollLocked);
+    const sections = useAppStore(state => state.sections);
 
     const handleSceneReady = useCallback(() => {
         console.log("[App v2.0] Scene ready");
@@ -70,7 +89,7 @@ const AppContent = () => {
             const loader = document.getElementById('loader');
             if (loader) {
                 loader.style.opacity = '0';
-                setTimeout(() => { loader.style.display = 'none'; }, 500);
+                setTimeout(() => { loader.style.display = 'none'; }, 50);
             }
         }
     }, [isSceneReady]);
@@ -97,54 +116,42 @@ const AppContent = () => {
         }
     }, [navigateNext, navigatePrev, isScrollLocked]);
 
+    // Keydown handling is kept for accessibility
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleKeyDown]);
 
-    // Intersection observer - Essential for 3D state morphing during scroll
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.id;
-                        const index = sections.findIndex(s => s.id === sectionId);
-                        if (index !== -1 && index !== currentSection) {
-                            setCurrentSection(index);
-                        }
-                    }
-                });
-            },
-            { threshold: 0.15, root: container } // Detect new section much earlier
-        );
-
-        sections.forEach(section => {
-            const el = document.getElementById(section.id);
-            if (el) observer.observe(el);
-        });
-
-        return () => observer.disconnect();
-    }, [sections, currentSection, setCurrentSection]);
-
-    // Lenis smooth scroll - configured for scroll-snap
+    // Lenis smooth scroll - Real-time Synchronized config
     useEffect(() => {
         const lenis = new Lenis({
             wrapper: containerRef.current,
             content: containerRef.current,
-            lerp: 0.2, // Increased from 0.15 for tighter feel
-            duration: 0.5, // Reduced from 0.7 for near-instant transitions
+            lerp: 0.35, // Direct-tracking sensitivity
+            duration: 0.3, // Ultra-responsive
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
             syncTouch: true,
-            syncTouchLerp: 0.2,
-            wheelMultiplier: 1.4, // even more responsive
-            touchMultiplier: 2.0,
+            syncTouchLerp: 0.35,
+            wheelMultiplier: 1.6,
+            touchMultiplier: 2.2,
+        });
+
+        lenisRef.current = lenis;
+
+        // Synchronous scroll detection for ZERO state lag
+        lenis.on('scroll', ({ scroll }) => {
+            const vh = window.innerHeight;
+            // TRIGGER EARLY: Switch section when 20% of the next one is visible
+            const index = Math.floor((scroll + vh * 0.2) / vh);
+            const clampedIndex = Math.max(0, Math.min(index, sections.length - 1));
+
+            // Bypass React's batching for immediate state update
+            if (clampedIndex !== useAppStore.getState().currentSection) {
+                setCurrentSection(clampedIndex);
+            }
         });
 
         function raf(time) {
@@ -153,14 +160,36 @@ const AppContent = () => {
         }
         requestAnimationFrame(raf);
 
-        return () => lenis.destroy();
-    }, []);
+        return () => {
+            lenis.destroy();
+            lenisRef.current = null;
+        };
+    }, [sections, setCurrentSection]);
+
+    // Optimization: Listen for navigation requests and use immediate scroll
+    useEffect(() => {
+        const handleNavigateReq = (e) => {
+            const { index, immediate } = e.detail;
+            const sectionId = sections[index]?.id;
+            if (sectionId && lenisRef.current) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    lenisRef.current.scrollTo(element, {
+                        immediate: immediate,
+                        force: true
+                    });
+                }
+            }
+        };
+        window.addEventListener('qubyts-navigate', handleNavigateReq);
+        return () => window.removeEventListener('qubyts-navigate', handleNavigateReq);
+    }, [sections]);
 
 
     return (
         <div className={`grain-overlay ${isDark ? 'bg-[#020202] text-white' : 'bg-[#FAFAFA] text-slate-900'}`}>
-            {/* 3D Particle System - Full screen cinematic */}
-            <VoidScene currentSection={currentSection} onReady={handleSceneReady} />
+            {/* 3D Particle System - Decoupled from Re-renders */}
+            <MemoVoidScene onReady={handleSceneReady} />
 
             {/* Navigation */}
             <MicroNav />
@@ -173,25 +202,25 @@ const AppContent = () => {
             {/* Terminal Modal */}
             <GeminiTerminal isOpen={isTerminalOpen} onClose={() => setIsTerminalOpen(false)} />
 
-            {/* Main Content - All sections preloaded */}
+            {/* Main Content - All sections preloaded and memoized */}
             <div ref={containerRef} className="snap-container">
-                <HomeSection />
-                <PhilosophySection />
-                <HardwareSection />
-                <QOSSection />
-                <DeveloperSection />
-                <CloudSection />
-                <SecuritySection />
-                <ResearchSection />
-                <ApplicationsSection />
-                <RoadmapSection />
-                <CommunitySection />
-                <ContactSection />
-                <QuantumFabricSection />
-                <DecoherenceSection />
-                <QuantumClassicalSection />
-                <EthicsSection />
-                <ShutdownSection />
+                <MemoHome />
+                <MemoPhilosophy />
+                <MemoHardware />
+                <MemoQOS />
+                <MemoDeveloper />
+                <MemoCloud />
+                <MemoSecurity />
+                <MemoResearch />
+                <MemoApplications />
+                <MemoRoadmap />
+                <MemoCommunity />
+                <MemoContact />
+                <MemoQuantumFabric />
+                <MemoDecoherence />
+                <MemoQuantumClassical />
+                <MemoEthics />
+                <MemoShutdown />
                 <Footer />
             </div>
         </div>

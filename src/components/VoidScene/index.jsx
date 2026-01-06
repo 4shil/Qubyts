@@ -27,15 +27,15 @@ import {
 // Clear shape cache on load to ensure new sizes take effect
 clearShapeCache();
 
-const VoidScene = ({ currentSection, onReady }) => {
+const VoidScene = ({ onReady }) => {
     const containerRef = useRef(null);
     const { isDark } = useTheme();
     const { activeEffect, isReducedMotion } = useAppStore();
 
-    // Optimized particle count for better performance headroom
+    // Reduced particle count for smoother performance
     const particleCount = useMemo(() => {
-        if (typeof window === 'undefined') return 3000;
-        return window.innerWidth < 768 ? 1500 : 3500;
+        if (typeof window === 'undefined') return 2000;
+        return window.innerWidth < 768 ? 800 : 2000;
     }, []);
 
     const effectStateRef = useRef({ explode: 0, pulse: 0, collapse: 0, freeze: false });
@@ -111,10 +111,7 @@ const VoidScene = ({ currentSection, onReady }) => {
 
         let mouseX = 0, mouseY = 0;
         let animationId;
-        let lastTime = 0;
-        const targetFPS = 60;
-        const frameInterval = 1000 / targetFPS;
-
+        // Native refresh rate (no throttle)
         const onMM = (e) => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -123,16 +120,17 @@ const VoidScene = ({ currentSection, onReady }) => {
 
         const lerp = (s, e, t) => s + (e - s) * t;
 
+        // Sync local reference for zero-latency access in loop
+        const currentSectionRef = { value: useAppStore.getState().currentSection };
+        const unsubscribe = useAppStore.subscribe(
+            state => (currentSectionRef.value = state.currentSection)
+        );
+
         const animate = (time) => {
             animationId = requestAnimationFrame(animate);
 
-            // Frame rate limiting
-            const delta = time - lastTime;
-            if (delta < frameInterval) return;
-            lastTime = time - (delta % frameInterval);
-
             const positions = particles.geometry.attributes.position.array;
-            const currentSectionLocal = useAppStore.getState().currentSection;
+            const currentSectionLocal = currentSectionRef.value;
             const targetShape = shapes[Math.min(currentSectionLocal, shapes.length - 1)];
 
             // Effect decay
@@ -146,9 +144,9 @@ const VoidScene = ({ currentSection, onReady }) => {
                 breathingRef.current = Math.sin(time * 0.0005) * 0.02;
             }
 
-            // Morph (optimized for real-time)
-            const morphThreshold = 0.005;
-            const morphSpeed = effectState.freeze ? 0 : 0.45; // Aggressive speed (prev 0.22)
+            // Morph (Smooth fluid transition)
+            const morphThreshold = 0.001;
+            const morphSpeed = effectState.freeze ? 0 : 0.12; // Smooth organic feel
             let hasChanges = false;
 
             for (let i = 0; i < particleCount * 3; i += 3) {
@@ -175,12 +173,12 @@ const VoidScene = ({ currentSection, onReady }) => {
                 particles.geometry.attributes.position.needsUpdate = true;
             }
 
-            // Color lerp (instantaneous transition)
+            // Color transition (Smooth fade)
             const themeIndex = Math.min(currentSectionLocal, CONFIG.themes.length - 1);
             const currentTheme = CONFIG.themes[themeIndex];
-            material.color.r = lerp(material.color.r, currentTheme.color.r, 0.4); // Instant shift (prev 0.2)
-            material.color.g = lerp(material.color.g, currentTheme.color.g, 0.4);
-            material.color.b = lerp(material.color.b, currentTheme.color.b, 0.4);
+            material.color.r = lerp(material.color.r, currentTheme.color.r, 0.08);
+            material.color.g = lerp(material.color.g, currentTheme.color.g, 0.08);
+            material.color.b = lerp(material.color.b, currentTheme.color.b, 0.08);
 
             // Rotation
             if (!effectState.freeze && !isReducedMotion) {
@@ -219,6 +217,7 @@ const VoidScene = ({ currentSection, onReady }) => {
 
         return () => {
             cancelAnimationFrame(animationId);
+            unsubscribe();
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', onMM);
             document.removeEventListener('visibilitychange', handleVisibility);

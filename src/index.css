@@ -28,7 +28,6 @@ body {
 }
 
 html {
-    scroll-behavior: smooth;
     overflow: hidden;
 }
 
@@ -36,7 +35,6 @@ html {
 .snap-container {
     height: 100vh;
     overflow-y: scroll;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
 }

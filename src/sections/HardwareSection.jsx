@@ -26,7 +26,7 @@ const HardwareSection = () => {
                     <div className="pb-4">
                         <SplitTextReveal
                             type="words"
-                            delay={0.2}
+                            delay={0.05}
                             className={`text-xl md:text-2xl leading-tight block font-light ${isDark ? 'text-white/60' : 'text-slate-600'}`}
                         >
                             Frozen in time to move at light speed. Absolute zero is our baseline.
@@ -43,7 +43,7 @@ const HardwareSection = () => {
                                 <Thermometer size={20} className="text-purple-400" />
                             </div>
                             <div>
-                                <MaskText delay={0.2}>
+                                <MaskText delay={0.05}>
                                     <h3 className={`text-8xl md:text-[10rem] font-bold tracking-brutal-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                                         12<span className="text-4xl opacity-40">mK</span>
                                     </h3>

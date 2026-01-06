@@ -24,17 +24,12 @@ const useAppStore = create((set, get) => ({
         const clampedIndex = Math.max(0, Math.min(index, sections.length - 1));
         set({ currentSection: clampedIndex, isScrollLocked: true });
 
-        // Scroll to section
-        const sectionId = sections[clampedIndex]?.id;
-        if (sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'auto' });
-            }
-        }
+        // Dispatch custom event for App.jsx to handle via optimized Lenis path
+        window.dispatchEvent(new CustomEvent('qubyts-navigate', {
+            detail: { index: clampedIndex, immediate: true }
+        }));
 
-        // Unlock after animation duration
-        setTimeout(() => set({ isScrollLocked: false }), 100);
+        set({ isScrollLocked: false });
     },
 
     // Navigate next/prev

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { motion } from 'framer-motion';
 import MaskText from '../components/animations/MaskText';
@@ -5,7 +6,7 @@ import SplitTextReveal from '../components/animations/SplitTextReveal';
 import StaggeredText from '../components/animations/StaggeredText';
 import MagneticButton from '../components/animations/MagneticButton';
 
-const HomeSection = () => {
+const HomeSection = memo(() => {
     const { isDark } = useTheme();
 
     return (
@@ -83,6 +84,6 @@ const HomeSection = () => {
             </div>
         </section>
     );
-};
+});
 
 export default HomeSection;

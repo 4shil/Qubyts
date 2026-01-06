@@ -22,7 +22,7 @@ const ApplicationsSection = () => {
                     <div className={`w-24 h-[3px] mt-4 ${isDark ? 'bg-rose-500' : 'bg-rose-600'}`} />
                     <SplitTextReveal
                         type="words"
-                        delay={0.2}
+                        delay={0.05}
                         className={`text-xl mt-6 block font-light ${isDark ? 'text-white/60' : 'text-slate-600'}`}
                     >
                         Designing life molecule by molecule.
