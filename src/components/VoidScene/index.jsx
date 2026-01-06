@@ -186,9 +186,11 @@ const VoidScene = ({ currentSection, onReady }) => {
         animationId = requestAnimationFrame(animate);
 
         const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const width = window.innerWidth;
+            camera.aspect = width / window.innerHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = getZPos();
+            renderer.setSize(width, window.innerHeight);
         };
         window.addEventListener('resize', handleResize, { passive: true });
 
