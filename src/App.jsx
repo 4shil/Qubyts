@@ -102,15 +102,7 @@ const AppContent = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleKeyDown]);
 
-    // Wheel navigation - REMOVED to prevent conflict with Lenis and fix flickering/zooming issues
-    // Native scroll + Lenis provides the smooth transition requested
-    /*
-    useEffect(() => {
-        // [Logic removed]
-    }, []);
-    */
-
-    // Intersection observer
+    // Intersection observer - Essential for 3D state morphing during scroll
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;

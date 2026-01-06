@@ -36,7 +36,6 @@ html {
 .snap-container {
     height: 100vh;
     overflow-y: scroll;
-    /* scroll-snap-type: y mandatory; */ /* RE MOVED to fix flickering */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
@@ -44,8 +43,6 @@ html {
 
 /* Each section is exactly 100vh with performance optimizations */
 .section-snap {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
     height: 100vh;
     min-height: 100vh;
     max-height: 100vh;
