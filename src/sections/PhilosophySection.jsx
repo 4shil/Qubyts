@@ -23,7 +23,7 @@ const PhilosophySection = () => {
                         </SplitTextReveal>
                         <SplitTextReveal
                             type="chars"
-                            delay={0.1}
+                            delay={0.05}
                             className={`text-[10vw] md:text-[6rem] font-bold tracking-brutal-tight leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r block ${isDark ? 'from-purple-400 to-cyan-400' : 'from-purple-600 to-cyan-600'
                                 }`}
                         >
@@ -37,7 +37,7 @@ const PhilosophySection = () => {
                         <StaggeredText
                             text="Classical computing has reached its fundamental limits. Moore's Law is dead. The transistor shrinks no further."
                             className="text-xl md:text-2xl font-light leading-relaxed block"
-                            delay={0.4}
+                            delay={0.2}
                         />
                         <p className="text-lg leading-relaxed animate-fade-in animate-delay-500">
                             We don't compute with bits. We compute with <span className={isDark ? 'text-cyan-400' : 'text-cyan-600'}>superposition</span>—where every qubit exists in infinite states simultaneously.

@@ -16,7 +16,7 @@ const StaggeredText = ({ text, className = "", delay = 0 }) => {
                     key={i} className="inline-block will-animate"
                     initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
                     whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                 >{word}</motion.span>
             ))}
         </motion.p>

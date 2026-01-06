@@ -146,9 +146,9 @@ const VoidScene = ({ currentSection, onReady }) => {
                 breathingRef.current = Math.sin(time * 0.0005) * 0.02;
             }
 
-            // Morph (optimized - only update when moving)
+            // Morph (optimized for real-time)
             const morphThreshold = 0.005;
-            const morphSpeed = effectState.freeze ? 0 : 0.12; // Snappier morph
+            const morphSpeed = effectState.freeze ? 0 : 0.45; // Aggressive speed (prev 0.22)
             let hasChanges = false;
 
             for (let i = 0; i < particleCount * 3; i += 3) {
@@ -175,12 +175,12 @@ const VoidScene = ({ currentSection, onReady }) => {
                 particles.geometry.attributes.position.needsUpdate = true;
             }
 
-            // Color lerp
+            // Color lerp (instantaneous transition)
             const themeIndex = Math.min(currentSectionLocal, CONFIG.themes.length - 1);
             const currentTheme = CONFIG.themes[themeIndex];
-            material.color.r = lerp(material.color.r, currentTheme.color.r, 0.04);
-            material.color.g = lerp(material.color.g, currentTheme.color.g, 0.04);
-            material.color.b = lerp(material.color.b, currentTheme.color.b, 0.04);
+            material.color.r = lerp(material.color.r, currentTheme.color.r, 0.4); // Instant shift (prev 0.2)
+            material.color.g = lerp(material.color.g, currentTheme.color.g, 0.4);
+            material.color.b = lerp(material.color.b, currentTheme.color.b, 0.4);
 
             // Rotation
             if (!effectState.freeze && !isReducedMotion) {

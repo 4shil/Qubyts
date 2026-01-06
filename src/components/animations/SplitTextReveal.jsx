@@ -12,7 +12,7 @@ const SplitTextReveal = ({ children, className = "", delay = 0, type = "words" }
                     initial={{ opacity: 0, y: 50, rotateX: 20 }}
                     whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                     viewport={{ once: true, margin: "50px" }}
-                    transition={{ duration: 0.6, delay: delay + (i * 0.03), ease: "easeOut" }}
+                    transition={{ duration: 0.35, delay: delay + (i * 0.02), ease: "easeOut" }}
                     className="inline-block will-animate origin-bottom"
                 >
                     {item === " " ? "\u00A0" : item}

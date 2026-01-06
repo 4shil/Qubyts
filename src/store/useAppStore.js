@@ -34,7 +34,7 @@ const useAppStore = create((set, get) => ({
         }
 
         // Unlock after animation duration
-        setTimeout(() => set({ isScrollLocked: false }), 600);
+        setTimeout(() => set({ isScrollLocked: false }), 100);
     },
 
     // Navigate next/prev
