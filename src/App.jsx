@@ -10,7 +10,7 @@ import CommandPalette from './components/CommandPalette';
 import GeminiTerminal from './components/GeminiTerminal';
 import CustomCursor from './components/CustomCursor';
 import MicroNav from './components/MicroNav';
-import ScrollProgress from './components/ScrollProgress';
+// import ScrollProgress from './components/ScrollProgress'; // REMOVED
 
 // PRELOAD all sections
 import HomeSection from './sections/HomeSection';
@@ -135,15 +135,15 @@ const AppContent = () => {
         const lenis = new Lenis({
             wrapper: containerRef.current,
             content: containerRef.current,
-            lerp: 0.1,
-            duration: 1.0,
+            lerp: 0.12, // Faster response
+            duration: 0.8, // Shorter duration
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
             syncTouch: true,
-            syncTouchLerp: 0.075,
-            wheelMultiplier: 0.8,
+            syncTouchLerp: 0.1,
+            wheelMultiplier: 1.1, // more responsive
             touchMultiplier: 1.5,
         });
 
@@ -162,15 +162,9 @@ const AppContent = () => {
             {/* 3D Particle System - Full screen cinematic */}
             <VoidScene currentSection={currentSection} onReady={handleSceneReady} />
 
-            {/* Noise overlay */}
-            <div
-                className="fixed inset-0 z-50 pointer-events-none mix-blend-overlay opacity-15"
-                style={{ backgroundImage: `url("${NOISE_SVG}")` }}
-            />
-
             {/* Navigation */}
             <MicroNav />
-            <ScrollProgress />
+            {/* <ScrollProgress /> */}
             <CommandPalette />
 
             {/* Custom cursor */}

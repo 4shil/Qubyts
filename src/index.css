@@ -48,7 +48,6 @@ html {
     max-height: 100vh;
     overflow: hidden;
     contain: layout style paint;
-    will-change: transform;
 }
 
 /* ACCESSIBILITY */
@@ -188,4 +187,7 @@ html {
     will-change: transform, opacity;
 }
 
-.cursor-scale {}
+/* Cursor animation speeds */
+.cursor-fast {
+    transition-duration: 100ms;
+}

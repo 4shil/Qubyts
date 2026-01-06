@@ -32,10 +32,10 @@ const VoidScene = ({ currentSection, onReady }) => {
     const { isDark } = useTheme();
     const { activeEffect, isReducedMotion } = useAppStore();
 
-    // Increased particle count for cinematic effect
+    // Optimized particle count for better performance headroom
     const particleCount = useMemo(() => {
-        if (typeof window === 'undefined') return 4000;
-        return window.innerWidth < 768 ? 2000 : 4500;
+        if (typeof window === 'undefined') return 3000;
+        return window.innerWidth < 768 ? 1500 : 3500;
     }, []);
 
     const effectStateRef = useRef({ explode: 0, pulse: 0, collapse: 0, freeze: false });
@@ -146,26 +146,34 @@ const VoidScene = ({ currentSection, onReady }) => {
                 breathingRef.current = Math.sin(time * 0.0005) * 0.02;
             }
 
-            // Morph (optimized - skip every other particle on mobile)
-            const step = particleCount < 1500 ? 6 : 3;
-            const morphSpeed = effectState.freeze ? 0 : 0.08;
+            // Morph (optimized - only update when moving)
+            const morphThreshold = 0.005;
+            const morphSpeed = effectState.freeze ? 0 : 0.12; // Snappier morph
+            let hasChanges = false;
 
-            for (let i = 0; i < particleCount * 3; i += step) {
-                positions[i] += (targetShape[i] - positions[i]) * morphSpeed;
-                if (step === 3) {
-                    positions[i + 1] += (targetShape[i + 1] - positions[i + 1]) * morphSpeed;
-                    positions[i + 2] += (targetShape[i + 2] - positions[i + 2]) * morphSpeed;
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                const dx = targetShape[i] - positions[i];
+                const dy = targetShape[i + 1] - positions[i + 1];
+                const dz = targetShape[i + 2] - positions[i + 2];
+
+                if (Math.abs(dx) > morphThreshold || Math.abs(dy) > morphThreshold || Math.abs(dz) > morphThreshold) {
+                    positions[i] += dx * morphSpeed;
+                    positions[i + 1] += dy * morphSpeed;
+                    positions[i + 2] += dz * morphSpeed;
+                    hasChanges = true;
                 }
             }
 
-            // Pulse scale
-            if (effectState.pulse > 0.01) {
-                particles.scale.setScalar(1 + effectState.pulse * 0.4);
-            } else {
-                particles.scale.setScalar(1 + breathingRef.current);
+            // Only update geometry and pulse scale if there's actual motion
+            if (hasChanges || effectState.pulse > 0.01 || Math.abs(breathingRef.current) > 0.001) {
+                // Pulse scale
+                if (effectState.pulse > 0.01) {
+                    particles.scale.setScalar(1 + effectState.pulse * 0.4);
+                } else {
+                    particles.scale.setScalar(1 + breathingRef.current);
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
             }
-
-            particles.geometry.attributes.position.needsUpdate = true;
 
             // Color lerp
             const themeIndex = Math.min(currentSectionLocal, CONFIG.themes.length - 1);
