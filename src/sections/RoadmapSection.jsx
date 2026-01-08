@@ -29,7 +29,7 @@ const RoadmapSection = () => {
                     {milestones.map((item, i) => (
                         <ZoomContainer
                             key={item.year}
-                            className={`flex items-center gap-8 p-8 brutalist-border transition-colors ${isDark
+                            className={`flex items-center gap-8 p-8 transition-colors ${isDark
                                     ? 'border-white/10 bg-black hover:border-fuchsia-500/50'
                                     : 'border-black/10 bg-white hover:border-fuchsia-500'
                                 }`}

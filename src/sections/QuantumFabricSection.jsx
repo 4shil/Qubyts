@@ -22,15 +22,15 @@ const QuantumFabricSection = () => {
                     </p>
                 </div>
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
                         <h3 className={`text-5xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>∞</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-cyan-400/60' : 'text-cyan-600'}`}>Entanglement</p>
                     </TiltCard>
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
                         <h3 className={`text-5xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>10⁹</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-cyan-400/60' : 'text-cyan-600'}`}>Qubits Linked</p>
                     </TiltCard>
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-cyan-500/50' : 'bg-white border-cyan-300'}`}>
                         <h3 className={`text-5xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>0</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-cyan-400/60' : 'text-cyan-600'}`}>Latency</p>
                     </TiltCard>

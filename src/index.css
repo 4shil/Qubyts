@@ -176,19 +176,39 @@ html {
 
 .glitch-text:hover {
     text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
-                0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
     animation: glitch 500ms infinite;
 }
 
 @keyframes glitch {
-    0% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
-    14% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
-    15% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
-    49% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
-    50% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
-    99% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
-    100% { text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75); }
+    0% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    14% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    15% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    49% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    50% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    99% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+
+    100% {
+        text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
 }
 
 .animate-delay-100 {
@@ -245,4 +265,176 @@ html {
 /* Cursor animation speeds */
 .cursor-fast {
     transition-duration: 100ms;
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ===== CYBERPUNK/NEON TEXT UTILITIES ===== */
+
+/* Neon glow text */
+.text-neon {
+    text-shadow:
+        0 0 5px currentColor,
+        0 0 10px currentColor,
+        0 0 20px currentColor,
+        0 0 40px currentColor;
+}
+
+.text-neon-subtle {
+    text-shadow:
+        0 0 5px currentColor,
+        0 0 15px rgba(0, 243, 255, 0.5);
+}
+
+/* Chromatic aberration effect */
+.text-chromatic {
+    position: relative;
+}
+
+.text-chromatic::before,
+.text-chromatic::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+
+.text-chromatic::before {
+    color: #ff0000;
+    animation: chromatic-shift 0.05s infinite;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(-2px);
+    z-index: -1;
+}
+
+.text-chromatic::after {
+    color: #00ffff;
+    animation: chromatic-shift 0.05s infinite reverse;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(2px);
+    z-index: -1;
+}
+
+@keyframes chromatic-shift {
+
+    0%,
+    100% {
+        clip-path: inset(0 0 100% 0);
+    }
+
+    25% {
+        clip-path: inset(50% 0 30% 0);
+    }
+
+    50% {
+        clip-path: inset(20% 0 60% 0);
+    }
+
+    75% {
+        clip-path: inset(80% 0 5% 0);
+    }
+}
+
+/* Japanese vertical text */
+.text-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.text-jp {
+    font-family: 'Noto Sans JP', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: 0.1em;
+}
+
+/* Cyberpunk label styling */
+.cyber-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(0, 243, 255, 0.6);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.cyber-label::before {
+    content: '//';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 0, 255, 0.5);
+}
+
+/* Scanline overlay for cards */
+.scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Enhanced glassmorphic card */
+.glass-card {
+    background: rgba(10, 10, 15, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    box-shadow:
+        0 0 1px rgba(0, 243, 255, 0.3),
+        inset 0 0 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: rgba(0, 243, 255, 0.3);
+    box-shadow:
+        0 0 20px rgba(0, 243, 255, 0.15),
+        inset 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Light mode glass card */
+.glass-card-light {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.05),
+        inset 0 0 30px rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-light:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow:
+        0 8px 40px rgba(99, 102, 241, 0.1),
+        inset 0 0 30px rgba(255, 255, 255, 0.3);
 }

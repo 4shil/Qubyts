@@ -31,7 +31,7 @@ const ApplicationsSection = () => {
 
                 {/* Cards */}
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <TiltCard className={`md:col-span-2 brutalist-border min-h-[350px] ${isDark ? 'bg-black border-rose-500/50' : 'bg-white border-rose-300'}`}>
+                    <TiltCard className={`md:col-span-2 min-h-[350px] ${isDark ? 'bg-black border-rose-500/50' : 'bg-white border-rose-300'}`}>
                         <div className="flex flex-col justify-center h-full p-8">
                             <Microscope className="text-rose-400 mb-8" size={40} />
                             <h3 className={`text-5xl font-bold mb-4 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -42,7 +42,7 @@ const ApplicationsSection = () => {
                             </p>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard className={`${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
                         <div className="flex flex-col h-full justify-between p-8">
                             <Leaf className="text-rose-400" size={28} />
                             <div>

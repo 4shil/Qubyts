@@ -21,7 +21,7 @@ const DecoherenceSection = () => {
                     </p>
                 </div>
                 <ZoomContainer className="max-w-4xl">
-                    <div className={`p-12 brutalist-border ${isDark ? 'bg-black border-pink-500/30' : 'bg-white border-pink-300'}`}>
+                    <div className={`p-12 ${isDark ? 'bg-black border-pink-500/30' : 'bg-white border-pink-300'}`}>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                             <div className="text-center">
                                 <p className={`text-4xl font-bold font-mono ${isDark ? 'text-pink-400' : 'text-pink-600'}`}>1ms</p>

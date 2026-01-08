@@ -24,7 +24,7 @@ const EcosystemSection = () => {
                     </p>
                 </div>
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <TiltCard className={`col-span-2 row-span-2 min-h-[400px] brutalist-border ${isDark ? 'bg-black border-indigo-500/50' : 'bg-white border-indigo-300'}`}>
+                    <TiltCard className="col-span-2 row-span-2 min-h-[400px]">
                         <div className="flex flex-col justify-between h-full p-8">
                             <Terminal className="text-indigo-400" size={40} />
                             <div>
@@ -35,17 +35,17 @@ const EcosystemSection = () => {
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard className="p-6">
                         <Command className="text-indigo-400 mb-4" size={24} />
                         <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Orbital</h3>
                         <p className={`text-sm ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Hardware drivers.</p>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard className="p-6">
                         <Network className="text-indigo-400 mb-4" size={24} />
                         <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Kernels</h3>
                         <p className={`text-sm ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Virtualization.</p>
                     </TiltCard>
-                    <TiltCard colSpan={2} className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard colSpan={2} className="p-6">
                         <div className="flex items-center justify-between">
                             <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>App Store</h3>
                             <Layers className="text-indigo-400" size={24} />

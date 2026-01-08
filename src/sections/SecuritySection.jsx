@@ -26,7 +26,7 @@ const SecuritySection = () => {
                     </div>
                 </div>
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <TiltCard className={`brutalist-border min-h-[300px] ${isDark ? 'bg-black border-orange-500/50' : 'bg-white border-orange-300'}`}>
+                    <TiltCard className="min-h-[300px]">
                         <div className="p-8 h-full flex flex-col justify-between">
                             <Lock className="text-orange-400" size={40} />
                             <div>
@@ -37,7 +37,7 @@ const SecuritySection = () => {
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border min-h-[300px] ${isDark ? 'bg-black border-orange-500/50' : 'bg-white border-orange-300'}`}>
+                    <TiltCard className="min-h-[300px]">
                         <div className="p-8 h-full flex flex-col justify-between">
                             <Shield className="text-orange-400" size={40} />
                             <div>

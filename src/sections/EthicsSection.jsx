@@ -31,7 +31,7 @@ const EthicsSection = () => {
                     {principles.map((item) => (
                         <TiltCard
                             key={item.title}
-                            className={`p-8 brutalist-border ${isDark ? 'bg-black border-amber-500/30' : 'bg-white border-amber-300'}`}
+                            className={`p-8 ${isDark ? 'bg-black border-amber-500/30' : 'bg-white border-amber-300'}`}
                         >
                             <h4 className={`text-2xl font-bold mb-3 tracking-brutal ${isDark ? 'text-amber-400' : 'text-amber-600'}`}>
                                 {item.title}

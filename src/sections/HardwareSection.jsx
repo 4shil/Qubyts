@@ -36,7 +36,7 @@ const HardwareSection = () => {
 
                 {/* Brutalist Cards Grid */}
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[300px]">
-                    <TiltCard className={`md:col-span-2 brutalist-border ${isDark ? 'bg-black border-purple-500/50' : 'bg-white border-purple-300'}`}>
+                    <TiltCard className="md:col-span-2">
                         <div className="h-full flex flex-col justify-between p-8">
                             <div className="flex justify-between items-start">
                                 <span className="text-[10px] font-mono text-purple-400 uppercase tracking-[0.3em]">Environment</span>
@@ -54,7 +54,7 @@ const HardwareSection = () => {
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard>
                         <div className="p-8 h-full flex flex-col justify-between">
                             <Chip className="text-purple-400" size={32} />
                             <div>

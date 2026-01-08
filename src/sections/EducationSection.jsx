@@ -32,7 +32,7 @@ const EducationSection = () => {
                     </div>
                 </div>
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <TiltCard className={`min-h-[400px] brutalist-border ${isDark ? 'bg-black border-amber-500/50' : 'bg-white border-amber-300'}`}>
+                    <TiltCard className="min-h-[400px]">
                         <div className="flex flex-col h-full justify-between p-8">
                             <Activity size={32} className={isDark ? 'text-amber-400' : 'text-amber-600'} />
                             <div>
@@ -40,14 +40,14 @@ const EducationSection = () => {
                                 <p className={`text-lg ${isDark ? 'text-white/60' : 'text-slate-600'}`}>Interactive quantum simulations.</p>
                                 <MagneticButton
                                     voidEffect="pulse"
-                                    className={`mt-6 px-6 py-3 brutalist-border text-xs font-bold uppercase tracking-widest ${isDark ? 'border-amber-500/50 text-amber-400 hover:bg-amber-500/10' : 'border-amber-600 text-amber-700 hover:bg-amber-50'}`}
+                                    className={`mt-6 px-6 py-3 glass-dark rounded-full text-xs font-bold uppercase tracking-widest ${isDark ? 'text-amber-400 hover:bg-amber-500/10' : 'text-amber-700 hover:bg-amber-50'}`}
                                 >
                                     Launch
                                 </MagneticButton>
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`min-h-[400px] brutalist-border ${isDark ? 'bg-black border-amber-500/50' : 'bg-white border-amber-300'}`}>
+                    <TiltCard className="min-h-[400px]">
                         <div className="flex flex-col h-full justify-between p-8">
                             <Menu size={32} className={isDark ? 'text-amber-400' : 'text-amber-600'} />
                             <div>
@@ -55,7 +55,7 @@ const EducationSection = () => {
                                 <p className={`text-lg ${isDark ? 'text-white/60' : 'text-slate-600'}`}>Industry-recognized credentials.</p>
                                 <MagneticButton
                                     voidEffect="explode"
-                                    className={`mt-6 px-6 py-3 brutalist-border text-xs font-bold uppercase tracking-widest ${isDark ? 'border-amber-500/50 text-amber-400 hover:bg-amber-500/10' : 'border-amber-600 text-amber-700 hover:bg-amber-50'}`}
+                                    className={`mt-6 px-6 py-3 glass-dark rounded-full text-xs font-bold uppercase tracking-widest ${isDark ? 'text-amber-400 hover:bg-amber-500/10' : 'text-amber-700 hover:bg-amber-50'}`}
                                 >
                                     Enroll
                                 </MagneticButton>

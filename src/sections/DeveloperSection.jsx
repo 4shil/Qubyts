@@ -26,7 +26,7 @@ const DeveloperSection = () => {
                 </div>
 
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <TiltCard colSpan={2} className={`min-h-[350px] brutalist-border ${isDark ? 'border-indigo-500/50' : 'border-indigo-300'}`}>
+                    <TiltCard colSpan={2} className={`min-h-[350px] ${isDark ? 'border-indigo-500/50' : 'border-indigo-300'}`}>
                         <div className="flex flex-col justify-between h-full p-8">
                             <Terminal className={isDark ? 'text-indigo-400' : 'text-indigo-600'} size={40} />
                             <div>
@@ -43,7 +43,7 @@ const DeveloperSection = () => {
                         </div>
                     </TiltCard>
 
-                    <TiltCard className={`brutalist-border ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+                    <TiltCard className={`${isDark ? 'border-white/10' : 'border-black/10'}`}>
                         <div className="flex flex-col justify-between h-full p-8">
                             <Code2 className={isDark ? 'text-indigo-400' : 'text-indigo-600'} size={32} />
                             <div>
@@ -57,7 +57,7 @@ const DeveloperSection = () => {
                         </div>
                     </TiltCard>
 
-                    <TiltCard colSpan={2} className={`brutalist-border ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+                    <TiltCard colSpan={2} className={`${isDark ? 'border-white/10' : 'border-black/10'}`}>
                         <div className="flex items-center justify-between p-8">
                             <div>
                                 <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>REST API</h3>
@@ -65,14 +65,14 @@ const DeveloperSection = () => {
                             </div>
                             <MagneticButton
                                 voidEffect="pulse"
-                                className={`px-6 py-3 brutalist-border text-xs font-bold uppercase tracking-widest ${isDark ? 'border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10' : 'border-indigo-600 text-indigo-700 hover:bg-indigo-50'}`}
+                                className={`px-6 py-3 text-xs font-bold uppercase tracking-widest ${isDark ? 'border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/10' : 'border-indigo-600 text-indigo-700 hover:bg-indigo-50'}`}
                             >
                                 Docs
                             </MagneticButton>
                         </div>
                     </TiltCard>
 
-                    <TiltCard className={`brutalist-border ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+                    <TiltCard className={`${isDark ? 'border-white/10' : 'border-black/10'}`}>
                         <div className="flex flex-col justify-center h-full p-8 text-center">
                             <Package className={`mx-auto mb-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} size={32} />
                             <h3 className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>2.4k</h3>

@@ -34,7 +34,7 @@ const ResearchSection = () => {
 
                 {/* Cards Grid */}
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <TiltCard colSpan={2} rowSpan={2} className={`min-h-[450px] brutalist-border ${isDark ? 'bg-black border-green-500/50' : 'bg-white border-green-300'}`}>
+                    <TiltCard colSpan={2} rowSpan={2} className="min-h-[450px]">
                         <div className="flex flex-col justify-between h-full p-8">
                             <div className={`w-full h-[2px] ${isDark ? 'bg-green-500/30' : 'bg-green-300'}`}></div>
                             <div>
@@ -49,24 +49,24 @@ const ResearchSection = () => {
                                 <span className="text-[10px] font-mono text-green-400 tracking-widest">EXP-094</span>
                                 <MagneticButton
                                     voidEffect="pulse"
-                                    className="px-6 py-3 brutalist-border border-green-500/50 text-green-400 text-xs font-bold hover:bg-green-500/10 uppercase tracking-widest"
+                                    className="px-6 py-3 glass-dark rounded-full text-green-400 text-xs font-bold hover:bg-green-500/10 uppercase tracking-widest"
                                 >
                                     Read Paper
                                 </MagneticButton>
                             </div>
                         </div>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard className="p-6">
                         <FileCode className="text-green-400 mb-4" size={24} />
                         <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Q-Gates</h4>
                         <p className={`text-sm mt-2 ${isDark ? 'text-white/40' : 'text-slate-500'}`}>Universal quantum logic.</p>
                     </TiltCard>
-                    <TiltCard className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard className="p-6">
                         <Network className="text-green-400 mb-4" size={24} />
                         <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Braiding</h4>
                         <p className={`text-sm mt-2 ${isDark ? 'text-white/40' : 'text-slate-500'}`}>Exchanging worldlines.</p>
                     </TiltCard>
-                    <TiltCard colSpan={2} className={`brutalist-border p-6 ${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'}`}>
+                    <TiltCard colSpan={2} className="p-6">
                         <div className="flex justify-between items-center">
                             <h4 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Error Suppression</h4>
                             <Lock className="text-green-400" size={24} />

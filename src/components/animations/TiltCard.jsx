@@ -22,9 +22,10 @@ const TiltCard = ({ children, className = "", colSpan = 1, rowSpan = 1 }) => {
 
     const handleMouseLeave = () => { x.set(200); y.set(200); };
 
+    // Enhanced glassmorphic base style - no more brutalist-border dependency
     const baseStyle = isDark
-        ? 'border-white/10 bg-black/50 hover:border-cyan-500/30'
-        : 'border-black/5 bg-white/70 hover:border-cyan-500/40 shadow-lg shadow-black/5';
+        ? 'glass-card'
+        : 'glass-card-light';
 
     return (
         <motion.div

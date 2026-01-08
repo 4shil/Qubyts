@@ -25,7 +25,7 @@ const QOSSection = () => {
                 </div>
 
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <TiltCard colSpan={2} rowSpan={2} className={`min-h-[450px] brutalist-border ${isDark ? 'border-green-500/50' : 'border-green-300'}`}>
+                    <TiltCard colSpan={2} rowSpan={2} className="min-h-[450px]">
                         <div className="flex flex-col justify-between h-full p-8">
                             <Terminal className={isDark ? 'text-green-400' : 'text-green-600'} size={48} />
                             <div>
@@ -49,7 +49,7 @@ const QOSSection = () => {
                         </div>
                     </TiltCard>
 
-                    <TiltCard className={`brutalist-border ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+                    <TiltCard>
                         <div className="flex flex-col justify-between h-full p-8">
                             <Layers className={isDark ? 'text-green-400' : 'text-green-600'} size={28} />
                             <div>
@@ -61,7 +61,7 @@ const QOSSection = () => {
                         </div>
                     </TiltCard>
 
-                    <TiltCard className={`brutalist-border ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+                    <TiltCard>
                         <div className="flex flex-col justify-between h-full p-8">
                             <Cpu className={isDark ? 'text-green-400' : 'text-green-600'} size={28} />
                             <div>

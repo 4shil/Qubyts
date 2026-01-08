@@ -25,15 +25,15 @@ const CommunitySection = () => {
                     </div>
                 </div>
                 <ZoomContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
                         <h3 className={`text-6xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>100k+</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Architects</p>
                     </TiltCard>
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
                         <h3 className={`text-6xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>3.5k</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Repositories</p>
                     </TiltCard>
-                    <TiltCard className={`h-64 flex flex-col justify-center items-center brutalist-border ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
+                    <TiltCard className={`h-64 flex flex-col justify-center items-center ${isDark ? 'bg-black border-teal-500/50' : 'bg-white border-teal-300'}`}>
                         <h3 className={`text-6xl font-bold mb-2 tracking-brutal ${isDark ? 'text-white' : 'text-slate-900'}`}>250</h3>
                         <p className={`text-sm font-mono uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-slate-500'}`}>Partners</p>
                     </TiltCard>
